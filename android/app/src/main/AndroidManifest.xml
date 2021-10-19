@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gobat_app">
    <application
-        android:label="gobat_app"
+        android:label="Gobat"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
