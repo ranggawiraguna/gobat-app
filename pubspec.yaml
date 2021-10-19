@@ -1,23 +1,27 @@
 name: gobat_app
-description: A new Flutter project.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+description: E-Healthy Application as a project assignment for course.
+publish_to: 'Uhamka' 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-
+  flutter_launcher_icons: ^0.9.2
+  flutter_native_splash: ^1.2.4
+  liquid_swipe: ^2.1.1
+  flutter_svg: ^0.23.0+1
+  auto_size_text: ^2.1.0
+  auto_size_text_field: ^0.1.7
+  percent_indicator: "^2.1.7+2"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.9.2
-  flutter_native_splash: ^1.2.4
 
 
 flutter_icons:
@@ -46,10 +50,14 @@ flutter:
   assets:
     - assets/SplashScreen.png
     - assets/AppIcon.png
+    - assets/OnBoarding_Illustration_1.svg
+    - assets/OnBoarding_Illustration_2.svg
+    - assets/OnBoarding_Illustration_3.svg
+    - assets/OnBoarding_IconNext.svg
 
   fonts:
     - family: Folks
       fonts:
         - asset: fonts/Folks_Regular.ttf
         - asset: fonts/Folks_Bold.ttf
-          weight: 900
+          weight: 700
