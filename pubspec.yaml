@@ -50,6 +50,7 @@ flutter:
   assets:
     - assets/SplashScreen.png
     - assets/AppIcon.png
+    - assets/AppIcon_2.png
     - assets/OnBoarding_Illustration_1.svg
     - assets/OnBoarding_Illustration_2.svg
     - assets/OnBoarding_Illustration_3.svg

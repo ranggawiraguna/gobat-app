@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gobat_app/pages/Login.dart';
 import 'package:gobat_app/widgets/FlexButton.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
 import 'package:gobat_app/widgets/OnBoardingSlide.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 
-class OnBoarding extends StatefulWidget {
-  static const style =
-      TextStyle(color: Colors.white, fontSize: 30, fontFamily: "Folks");
+import 'Register.dart';
 
+class OnBoarding extends StatefulWidget {
   @override
   _OnBoardingState createState() => _OnBoardingState();
 }
@@ -28,7 +28,6 @@ class _OnBoardingState extends State<OnBoarding> {
     super.initState();
   }
 
-  @override
   final pages = [
     OnBoardingSlide(
         color: Color(0xFF874551),
@@ -163,7 +162,15 @@ class _OnBoardingState extends State<OnBoarding> {
                                               textColor: Colors.white,
                                               buttonColor: Color(0xFFFF583C),
                                               buttonRadius: 6,
-                                              action: () {},
+                                              action: () {
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Login(),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                             FlexSpace(50),
                                             FlexButton(
@@ -176,7 +183,15 @@ class _OnBoardingState extends State<OnBoarding> {
                                               textColor: Colors.black,
                                               buttonColor: Color(0xFFFFFFFF),
                                               buttonRadius: 6,
-                                              action: () {},
+                                              action: () {
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Register(),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                             FlexSpace(100),
                                           ],
