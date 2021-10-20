@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1014992124378",
+    "firebase_url": "https://gobat-app-default-rtdb.firebaseio.com",
+    "project_id": "gobat-app",
+    "storage_bucket": "gobat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014992124378:android:253eb3a7ac169430d628e3",
+        "android_client_info": {
+          "package_name": "com.projects.gobat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014992124378-rron04lrlm0la4ovs0lm6cjg7gsb46g8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCrdAaI6SrpswTI7rhfqRxgLrAAMcug9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014992124378-rron04lrlm0la4ovs0lm6cjg7gsb46g8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

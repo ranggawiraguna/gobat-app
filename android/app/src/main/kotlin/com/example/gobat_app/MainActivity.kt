@@ -1,4 +1,4 @@
-package com.example.gobat_app
+package com.projects.gobat_app
 
 import io.flutter.embedding.android.FlutterActivity
 

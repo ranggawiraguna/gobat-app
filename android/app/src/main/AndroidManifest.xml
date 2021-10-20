@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gobat_app">
+    package="com.projects.gobat_app">
    <application
         android:label="Gobat"
         android:icon="@mipmap/ic_launcher">
