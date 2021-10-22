@@ -1,20 +1,21 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'FlexSpace.dart';
 
-// ignore: non_constant_identifier_names
 Flexible FlexButton({
-  int flexButton,
-  int innerSpaceVertical,
-  int innerSpaceHorizontal,
-  int flexTextVertical,
-  int flexTextHorizontal,
-  String textContent,
-  Color textColor,
-  Color buttonColor,
-  double buttonRadius,
-  Function action,
+  required int flexButton,
+  required int innerSpaceVertical,
+  required int innerSpaceHorizontal,
+  required int flexTextVertical,
+  required int flexTextHorizontal,
+  required String textContent,
+  required Color textColor,
+  required Color buttonColor,
+  required double buttonRadius,
+  required Function() action,
 }) {
   return Flexible(
     flex: flexButton,

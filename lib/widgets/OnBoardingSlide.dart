@@ -1,12 +1,16 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'FlexSpace.dart';
 
-// ignore: non_constant_identifier_names
 Container OnBoardingSlide(
-    {Color color, String asset, String title, String description}) {
+    {required Color color,
+    required String asset,
+    required String title,
+    required String description}) {
   return Container(
     color: color,
     child: SizedBox(

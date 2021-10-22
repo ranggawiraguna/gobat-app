@@ -1,19 +1,20 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'FlexSpace.dart';
 
-// ignore: non_constant_identifier_names
 AspectRatio RatioButtonRounded({
-  double aspectRatio,
-  int innerSpaceVertical,
-  int innerSpaceHorizontal,
-  int flexTextHeight,
-  int flexTextWidth,
-  String textContent,
-  Color textColor,
-  Color buttonColor,
-  Function action,
+  required double aspectRatio,
+  required int innerSpaceVertical,
+  required int innerSpaceHorizontal,
+  required int flexTextHeight,
+  required int flexTextWidth,
+  required String textContent,
+  required Color textColor,
+  required Color buttonColor,
+  required Function()? action,
 }) {
   return AspectRatio(
     aspectRatio: aspectRatio,

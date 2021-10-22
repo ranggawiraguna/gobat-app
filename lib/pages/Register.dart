@@ -1,11 +1,12 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gobat_app/pages/Login.dart';
 import 'package:gobat_app/widgets/DefaultTextField.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
 import 'package:gobat_app/widgets/RatioButtonRounded.dart';
-
-import 'Login.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -89,7 +90,6 @@ class _RegisterState extends State<Register> {
                                 ),
                                 AspectRatio(aspectRatio: 880 / 100),
                                 DefaultTextField(
-                                  aspectRatio: 880 / 133,
                                   label: "Username",
                                   controller: emailController,
                                   textInputType: TextInputType.name,
@@ -98,7 +98,6 @@ class _RegisterState extends State<Register> {
                                 ),
                                 AspectRatio(aspectRatio: 880 / 50),
                                 DefaultTextField(
-                                  aspectRatio: 880 / 133,
                                   label: "Password",
                                   controller: passwordController,
                                   textInputType: TextInputType.name,
@@ -107,7 +106,6 @@ class _RegisterState extends State<Register> {
                                 ),
                                 AspectRatio(aspectRatio: 880 / 50),
                                 DefaultTextField(
-                                  aspectRatio: 880 / 133,
                                   label: "Nama Lengkap",
                                   controller: nameController,
                                   textInputType: TextInputType.name,
@@ -116,7 +114,6 @@ class _RegisterState extends State<Register> {
                                 ),
                                 AspectRatio(aspectRatio: 880 / 50),
                                 DefaultTextField(
-                                  aspectRatio: 880 / 133,
                                   label: "Email",
                                   controller: emailController,
                                   textInputType: TextInputType.name,

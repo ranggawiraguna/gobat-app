@@ -12,8 +12,8 @@ class SplashScreen extends StatelessWidget {
           : Color(0xFF404040).withOpacity(1.0),
       body: Center(
           child: lightMode
-              ? Image.asset('assets/SplashScreen.png')
-              : Image.asset('assets/SplashScreen.png')),
+              ? Image.asset('assets/App_SplashScreen.png')
+              : Image.asset('assets/App_SplashScreen.png')),
     );
   }
 }

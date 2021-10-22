@@ -4,13 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/pages/Login.dart';
+import 'package:gobat_app/pages/Register.dart';
 import 'package:gobat_app/widgets/FlexButton.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
 import 'package:gobat_app/widgets/NavigatorScale.dart';
 import 'package:gobat_app/widgets/OnBoardingSlide.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
-
-import 'Register.dart';
 
 class OnBoarding extends StatefulWidget {
   @override
@@ -20,9 +19,9 @@ class OnBoarding extends StatefulWidget {
 class _OnBoardingState extends State<OnBoarding>
     with SingleTickerProviderStateMixin {
   int page = 0;
-  LiquidController liquidController;
-  UpdateType updateType;
-  Container buttonAction;
+  late LiquidController liquidController;
+  late UpdateType updateType;
+  late Container buttonAction;
 
   @override
   void initState() {

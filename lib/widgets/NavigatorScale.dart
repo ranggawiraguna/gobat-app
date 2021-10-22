@@ -4,7 +4,7 @@ class NavigatorScale extends PageRouteBuilder {
   final Widget child;
 
   NavigatorScale({
-    this.child,
+    required this.child,
   }) : super(
           transitionDuration: Duration(seconds: 1),
           pageBuilder: (context, animation, secondaryAnimation) => child,

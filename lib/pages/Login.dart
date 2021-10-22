@@ -1,31 +1,62 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/pages/Main.dart';
+import 'package:gobat_app/pages/Register.dart';
+import 'package:gobat_app/widgets/AlertNotification.dart';
 import 'package:gobat_app/widgets/DefaultTextField.dart';
+import 'package:gobat_app/widgets/DefaultTextFieldSingle.dart';
+import 'package:gobat_app/widgets/DialogActionContainer.dart';
+import 'package:gobat_app/widgets/FlexButton.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
 import 'package:gobat_app/widgets/RatioButtonRounded.dart';
-
-import 'Register.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends State<Login> with TickerProviderStateMixin {
   final TextEditingController usernameController = TextEditingController(),
+      usernameController2 = TextEditingController(),
       passwordController = TextEditingController();
-  bool _passwordVisible;
+  late bool _passwordVisible,
+      _invalidUsername,
+      _invalidUsername2,
+      _invalidPassword,
+      _visibleDialogSendPassword,
+      _successSendPassword;
+  late List<User> users;
 
   @override
   void initState() {
-    _passwordVisible = false;
+    users = [];
+    _invalidPassword = _passwordVisible = false;
+    _visibleDialogSendPassword = false;
+    _invalidUsername = true;
+    _invalidUsername2 = true;
+    _successSendPassword = false;
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference userNode =
+        (FirebaseFirestore.instance).collection("users");
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -38,6 +69,20 @@ class _LoginState extends State<Login> {
           physics: ClampingScrollPhysics(),
           child: Stack(
             children: [
+              StreamBuilder<QuerySnapshot>(
+                stream: userNode.snapshots(),
+                builder: (_, snapshot) {
+                  if (snapshot.hasData) {
+                    users.clear();
+                    users.addAll(
+                      snapshot.data!.docs
+                          .map((element) => new User(element))
+                          .toList(),
+                    );
+                  }
+                  return Container(width: 0, height: 0);
+                },
+              ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: (MediaQuery.of(context).size.height -
@@ -95,35 +140,61 @@ class _LoginState extends State<Login> {
                                 ),
                                 AspectRatio(aspectRatio: 880 / 100),
                                 DefaultTextField(
-                                  aspectRatio: 880 / 133,
                                   label: "Username",
                                   controller: usernameController,
                                   textInputType: TextInputType.name,
                                   textInputAction: TextInputAction.next,
-                                  obscureText: false,
+                                  errorText: (_invalidUsername &&
+                                          usernameController.text.length > 0)
+                                      ? "Username yang dimasukkan tidak terdaftar"
+                                      : null,
+                                  onChanged: (text) {
+                                    setState((() => _invalidUsername = true));
+                                    users.forEach((element) {
+                                      if (text == element.username) {
+                                        setState(
+                                            (() => _invalidUsername = false));
+                                      }
+                                    });
+                                  },
                                 ),
                                 AspectRatio(aspectRatio: 880 / 50),
                                 DefaultTextField(
-                                  aspectRatio: 880 / 133,
-                                  label: "Password",
-                                  controller: passwordController,
-                                  textInputType: TextInputType.name,
-                                  textInputAction: TextInputAction.done,
-                                  obscureText: !_passwordVisible,
-                                  iconSuffix: IconButton(
-                                    icon: Icon(
-                                      _passwordVisible
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                      color: Theme.of(context).primaryColorDark,
+                                    label: "Password",
+                                    controller: passwordController,
+                                    textInputType: TextInputType.name,
+                                    textInputAction: TextInputAction.done,
+                                    obscureText: !_passwordVisible,
+                                    errorText: (_invalidPassword &&
+                                            passwordController.text.length > 0)
+                                        ? "Password yang dimasukkan tidak sesuai"
+                                        : null,
+                                    iconSuffix: IconButton(
+                                      icon: Icon(
+                                        _passwordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _passwordVisible = !_passwordVisible;
+                                        });
+                                      },
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _passwordVisible = !_passwordVisible;
-                                      });
-                                    },
-                                  ),
-                                ),
+                                    onChanged: (text) {
+                                      if (!_invalidUsername) {
+                                        setState(
+                                            (() => _invalidPassword = true));
+                                        users.forEach((element) {
+                                          if (text == element.password) {
+                                            setState((() =>
+                                                _invalidPassword = false));
+                                          }
+                                        });
+                                      }
+                                    }),
                                 AspectRatio(aspectRatio: 880 / 100),
                                 SizedBox(
                                   width: double.infinity,
@@ -142,12 +213,41 @@ class _LoginState extends State<Login> {
                                           textColor: Colors.white,
                                           buttonColor: Colors.black,
                                           action: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => Main(),
-                                              ),
-                                            );
+                                            if (!_invalidUsername &&
+                                                !_invalidPassword) {
+                                              AlertNotification(
+                                                context: context,
+                                                backgroundColor:
+                                                    Color(0xFF43A047),
+                                                aspectRatio: 792 / 95,
+                                                widthPercent: 0.73,
+                                                iconPath:
+                                                    "assets/Icon_ChecklistSnackbar.svg",
+                                                textContent:
+                                                    "Berhasil masuk, mohon tunggu beberapa saat!",
+                                                flexContentVertical: 38,
+                                                flexIconHorizontal: 35,
+                                                flexTextHorizontal: 778,
+                                                textMaxLines: 1,
+                                                duration: 3000,
+                                                nextAction: () {
+                                                  Timer(
+                                                      Duration(
+                                                          milliseconds: 3000),
+                                                      () {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Main(),
+                                                      ),
+                                                    );
+                                                    usernameController.clear();
+                                                    passwordController.clear();
+                                                  });
+                                                },
+                                              );
+                                            }
                                           },
                                         ),
                                       ),
@@ -182,7 +282,12 @@ class _LoginState extends State<Login> {
                                               style: TextButton.styleFrom(
                                                 padding: EdgeInsets.all(0),
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                setState(() {
+                                                  _visibleDialogSendPassword =
+                                                      true;
+                                                });
+                                              },
                                             ),
                                           ),
                                         ),
@@ -281,6 +386,409 @@ class _LoginState extends State<Login> {
                       )),
                 ),
               ),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 400),
+                child: _visibleDialogSendPassword
+                    ? SizedBox(
+                        key: ValueKey<int>(1),
+                        width: MediaQuery.of(context).size.width,
+                        height: (MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top),
+                        child: Container(
+                          color: Color(0x66000000),
+                        ),
+                      )
+                    : Container(key: ValueKey<int>(0), width: 0, height: 0),
+              ),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return ScaleTransition(child: child, scale: animation);
+                },
+                child: _visibleDialogSendPassword
+                    ? AnimatedSwitcher(
+                        key: ValueKey<int>(1),
+                        duration: Duration(milliseconds: 500),
+                        child: !_successSendPassword
+                            ? DialogActionContainer(
+                                key: 0,
+                                context: context,
+                                child: Column(
+                                  children: [
+                                    FlexSpace(100),
+                                    Flexible(
+                                      flex: 72,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(156),
+                                          Flexible(
+                                            flex: 618,
+                                            child: Center(
+                                              child: AutoSizeText(
+                                                "Lupa Password Kamu ?",
+                                                textAlign: TextAlign.center,
+                                                minFontSize: 1,
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontSize: 100,
+                                                  fontFamily: "Folks",
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF000000),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          FlexSpace(156),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(20),
+                                    Flexible(
+                                      flex: 100,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(106),
+                                          Flexible(
+                                            flex: 718,
+                                            child: Center(
+                                              child: AutoSizeText(
+                                                "Masukkan email pendaftaran kamu untuk\nmendapatkan kata sandi yang kamu miliki",
+                                                textAlign: TextAlign.center,
+                                                minFontSize: 1,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                  fontSize: 100,
+                                                  fontFamily: "Folks",
+                                                  color: Color(0xFF000000),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          FlexSpace(106),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(40),
+                                    Flexible(
+                                        flex: 620,
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                              "assets/Illustration_SendMailSuccess.svg"),
+                                        )),
+                                    FlexSpace(40),
+                                    Flexible(
+                                      flex: 136,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(75),
+                                          Flexible(
+                                            flex: 780,
+                                            child: SizedBox(
+                                              height: double.infinity,
+                                              child: DefaultTextFieldSingle(
+                                                label: "Masukkkan Username",
+                                                controller: usernameController2,
+                                                textInputType:
+                                                    TextInputType.name,
+                                                textInputAction:
+                                                    TextInputAction.done,
+                                                onChanged: (text) {
+                                                  setState((() =>
+                                                      _invalidUsername2 =
+                                                          true));
+                                                  users.forEach((element) {
+                                                    if (text ==
+                                                        element.username) {
+                                                      setState((() =>
+                                                          _invalidUsername2 =
+                                                              false));
+                                                    }
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          FlexSpace(75),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(42),
+                                    Flexible(
+                                      flex: 99,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(75),
+                                          FlexButton(
+                                            flexButton: 780,
+                                            innerSpaceVertical: 20,
+                                            innerSpaceHorizontal: 219,
+                                            flexTextVertical: 59,
+                                            flexTextHorizontal: 342,
+                                            textContent: "Kirim Password",
+                                            textColor: Colors.white,
+                                            buttonColor: Color(0xFFFF583C),
+                                            buttonRadius: 6,
+                                            action: () {
+                                              if (!_invalidUsername2) {
+                                                for (User user in users) {
+                                                  if (user.username ==
+                                                      usernameController2
+                                                          .text) {
+                                                    sendConfirmationPassword(
+                                                        user);
+                                                    setState(() {
+                                                      _successSendPassword =
+                                                          true;
+                                                    });
+                                                  }
+                                                }
+                                              } else if (usernameController2
+                                                      .text.length ==
+                                                  0) {
+                                                AlertNotification(
+                                                  context: context,
+                                                  backgroundColor:
+                                                      Color(0xFFFFA000),
+                                                  aspectRatio: 748 / 95,
+                                                  widthPercent: 0.76,
+                                                  iconPath:
+                                                      "assets/Icon_WarningSnackbar.svg",
+                                                  textContent:
+                                                      "Silakan masukkan username terlebih dahulu",
+                                                  flexContentVertical: 38,
+                                                  flexIconHorizontal: 35,
+                                                  flexTextHorizontal: 633,
+                                                  textMaxLines: 1,
+                                                  duration: 3000,
+                                                );
+                                              } else {
+                                                AlertNotification(
+                                                    context: context,
+                                                    backgroundColor:
+                                                        Color(0xFFB00020),
+                                                    aspectRatio: 735 / 95,
+                                                    widthPercent: 0.68,
+                                                    iconPath:
+                                                        "assets/Icon_ErrorSnackbar.svg",
+                                                    textContent:
+                                                        "Username yang dimasukkan tidak terdaftar ",
+                                                    flexContentVertical: 38,
+                                                    flexIconHorizontal: 35,
+                                                    flexTextHorizontal: 620,
+                                                    textMaxLines: 1,
+                                                    duration: 3000,
+                                                    nextAction: () {});
+                                              }
+                                            },
+                                          ),
+                                          FlexSpace(75),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(75),
+                                  ],
+                                ),
+                                closeAction: () {
+                                  setState(() {
+                                    _visibleDialogSendPassword = false;
+                                    _successSendPassword = false;
+                                  });
+                                  usernameController2.clear();
+                                })
+                            : DialogActionContainer(
+                                key: 1,
+                                context: context,
+                                child: Column(
+                                  children: [
+                                    FlexSpace(100),
+                                    Flexible(
+                                      flex: 72,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(159),
+                                          Flexible(
+                                            flex: 612,
+                                            child: Center(
+                                              child: AutoSizeText(
+                                                "Password Telah Dikirim",
+                                                textAlign: TextAlign.center,
+                                                minFontSize: 1,
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontSize: 100,
+                                                  fontFamily: "Folks",
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF000000),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          FlexSpace(159),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(50),
+                                    Flexible(
+                                        flex: 620,
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                              "assets/Illustration_SendMailSuccess.svg"),
+                                        )),
+                                    FlexSpace(63),
+                                    Flexible(
+                                      flex: 50,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(106),
+                                          Flexible(
+                                            flex: 718,
+                                            child: Center(
+                                              child: AutoSizeText(
+                                                "Password kamu telah dikirim melalui email",
+                                                textAlign: TextAlign.center,
+                                                minFontSize: 1,
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontSize: 100,
+                                                  fontFamily: "Folks",
+                                                  color: Color(0xFF000000),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          FlexSpace(106),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(0),
+                                    Flexible(
+                                      flex: 52,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(226),
+                                          Flexible(
+                                            flex: 478,
+                                            child: Center(
+                                              child: AutoSizeText(
+                                                (() {
+                                                  if (!_invalidUsername2)
+                                                    for (User user in users)
+                                                      if (user.username ==
+                                                          usernameController2
+                                                              .text)
+                                                        return user.email;
+                                                })()
+                                                    .toString(),
+                                                textAlign: TextAlign.center,
+                                                minFontSize: 1,
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  fontSize: 100,
+                                                  fontFamily: "Folks",
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF000000),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          FlexSpace(226),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(0),
+                                    Flexible(
+                                      flex: 100,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(100),
+                                          Flexible(
+                                            flex: 730,
+                                            child: Center(
+                                              child: AutoSizeText(
+                                                "Silahkan periksa email kamu untuk melihat\npassword dari akun yang kamu miiliki",
+                                                textAlign: TextAlign.center,
+                                                minFontSize: 1,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                  fontSize: 100,
+                                                  fontFamily: "Folks",
+                                                  color: Color(0xFF000000),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          FlexSpace(100),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(63),
+                                    Flexible(
+                                      flex: 99,
+                                      child: Row(
+                                        children: [
+                                          FlexSpace(75),
+                                          FlexButton(
+                                            flexButton: 780,
+                                            innerSpaceVertical: 20,
+                                            innerSpaceHorizontal: 275,
+                                            flexTextVertical: 59,
+                                            flexTextHorizontal: 230,
+                                            textContent: "Lihat Email",
+                                            textColor: Colors.white,
+                                            buttonColor: Color(0xFFFF583C),
+                                            buttonRadius: 6,
+                                            action: () async {
+                                              if (!_invalidUsername2) {
+                                                for (User user in users) {
+                                                  if (user.username ==
+                                                      usernameController2
+                                                          .text) {
+                                                    await LaunchApp.openApp(
+                                                      androidPackageName:
+                                                          'com.google.android.gm',
+                                                      iosUrlScheme:
+                                                          'message://',
+                                                    ).catchError((e) async {
+                                                      if (Platform.isIOS &&
+                                                          await canLaunch(
+                                                              "message://")) {
+                                                        await launch(
+                                                            "message://");
+                                                      } else {
+                                                        await launch(
+                                                            "https://mail.google.com/mail/u/?authuser=" +
+                                                                user.email);
+                                                      }
+                                                    });
+                                                  }
+                                                }
+                                              }
+                                            },
+                                          ),
+                                          FlexSpace(75),
+                                        ],
+                                      ),
+                                    ),
+                                    FlexSpace(75),
+                                  ],
+                                ),
+                                closeAction: () {
+                                  setState(() {
+                                    _visibleDialogSendPassword = false;
+                                    _successSendPassword = false;
+                                  });
+                                  usernameController2.clear();
+                                }),
+                        transitionBuilder:
+                            (Widget child, Animation<double> animation) {
+                          return FadeTransition(
+                            child: child,
+                            opacity: animation,
+                          );
+                        },
+                      )
+                    : Container(key: ValueKey<int>(0), width: 0, height: 0),
+              )
             ],
           ),
         ),
@@ -288,4 +796,26 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+}
+
+Future sendConfirmationPassword(User user) async {
+  final url = Uri.parse("https://api.emailjs.com/api/v1.0/email/send");
+
+  // ignore: unused_local_variable
+  final response = await http.post(url,
+      headers: {
+        'origin': 'http://localhost',
+        'Content-Type': 'application/json'
+      },
+      body: json.encode({
+        'service_id': 'service_7kdytqd',
+        'template_id': 'template_n5dtvbl',
+        'user_id': 'user_ZgmXKUfsGzqOrmYDZOnHz',
+        'template_params': {
+          'user_fullname': user.fullname,
+          'user_email': user.email,
+          'user_username': user.username,
+          'user_password': user.password
+        }
+      }));
 }
