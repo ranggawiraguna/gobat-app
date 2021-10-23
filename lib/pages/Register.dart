@@ -70,7 +70,13 @@ class _RegisterState extends State<Register> {
                       users.clear();
                       users.addAll(
                         snapshot.data!.docs
-                            .map((element) => new User(element))
+                            .map((element) => new User(
+                                  id: element.id,
+                                  username: element.get("username"),
+                                  password: element.get("password"),
+                                  fullname: element.get("fullname"),
+                                  email: element.get("email"),
+                                ))
                             .toList(),
                       );
                     }
@@ -405,8 +411,8 @@ class _RegisterState extends State<Register> {
                                                           Duration(
                                                             milliseconds: 3000,
                                                           ), () {
-                                                        Navigator.push(
-                                                          context,
+                                                        Navigator.of(context)
+                                                            .push(
                                                           MaterialPageRoute(
                                                             builder:
                                                                 (context) =>
@@ -529,8 +535,9 @@ class _RegisterState extends State<Register> {
                                                                       .all(0),
                                                             ),
                                                             onPressed: () {
-                                                              Navigator.push(
-                                                                context,
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(
                                                                 MaterialPageRoute(
                                                                   builder:
                                                                       (context) =>

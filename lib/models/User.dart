@@ -1,13 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class User {
-  late String id, username, password, fullname, email;
+  final String id, username, password, fullname, email;
 
-  User(QueryDocumentSnapshot<Object?> element) {
-    this.id = element.id;
-    this.username = element["username"];
-    this.password = element["password"];
-    this.fullname = element["fullname"];
-    this.email = element["email"];
-  }
+  User(
+      {required this.id,
+      required this.username,
+      required this.password,
+      required this.fullname,
+      required this.email});
+
+  Map<String, dynamic> toJson() => {
+        "id": this.id,
+        "username": this.username,
+        "password": this.password,
+        "fullname": this.fullname,
+        "email": this.email,
+      };
 }

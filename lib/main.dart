@@ -1,16 +1,33 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gobat_app/pages/Main.dart';
 import 'package:gobat_app/pages/OnBoarding.dart';
 import 'package:gobat_app/pages/SplashScreen.dart';
+import 'package:gobat_app/services/AccountSessionManager.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late bool isUserLoggedIn;
+
+  @override
+  void initState() {
+    AccountSessionManager().isUserLoggedIn().then((value) {
+      setState(() => isUserLoggedIn = value);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -27,7 +44,9 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           home: (snapshot.connectionState == ConnectionState.waiting)
               ? SplashScreen()
-              : OnBoarding(),
+              : isUserLoggedIn
+                  ? Main()
+                  : OnBoarding(),
           debugShowCheckedModeBanner: false,
         );
       },

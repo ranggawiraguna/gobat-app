@@ -14,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/pages/Main.dart';
 import 'package:gobat_app/pages/Register.dart';
+import 'package:gobat_app/services/AccountSessionManager.dart';
 import 'package:gobat_app/widgets/AlertNotification.dart';
 import 'package:gobat_app/widgets/DefaultTextField.dart';
 import 'package:gobat_app/widgets/DefaultTextFieldSingle.dart';
@@ -79,11 +80,15 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       users.clear();
-                      users.addAll(
-                        snapshot.data!.docs
-                            .map((element) => new User(element))
-                            .toList(),
-                      );
+                      users.addAll(snapshot.data!.docs.map(
+                        (element) => new User(
+                          id: element.id,
+                          username: element.get("username"),
+                          password: element.get("password"),
+                          fullname: element.get("fullname"),
+                          email: element.get("email"),
+                        ),
+                      ));
                     }
                     return Container(width: 0, height: 0);
                   },
@@ -238,21 +243,45 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                   textMaxLines: 1,
                                                   duration: 3000,
                                                   nextAction: () {
-                                                    Timer(
-                                                        Duration(
-                                                            milliseconds: 3000),
-                                                        () {
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Main(),
-                                                        ),
-                                                      );
-                                                      usernameController
-                                                          .clear();
-                                                      passwordController
-                                                          .clear();
+                                                    users.forEach((user) {
+                                                      if (usernameController
+                                                              .text ==
+                                                          user.username) {
+                                                        AccountSessionManager()
+                                                            .createLoginSession(
+                                                                id: user.id,
+                                                                username: user
+                                                                    .username,
+                                                                password: user
+                                                                    .password,
+                                                                fullname: user
+                                                                    .fullname,
+                                                                email:
+                                                                    user.email)
+                                                            .whenComplete(() {
+                                                          Timer(
+                                                              Duration(
+                                                                  milliseconds:
+                                                                      3000),
+                                                              () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pushAndRemoveUntil(
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              Main(),
+                                                                    ),
+                                                                    (Route<dynamic>
+                                                                            route) =>
+                                                                        false);
+                                                            usernameController
+                                                                .clear();
+                                                            passwordController
+                                                                .clear();
+                                                          });
+                                                        });
+                                                      }
                                                     });
                                                   },
                                                 );

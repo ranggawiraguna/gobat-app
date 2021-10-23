@@ -187,9 +187,9 @@ class _OnBoardingState extends State<OnBoarding>
                         buttonColor: Color(0xFFFF583C),
                         buttonRadius: 6,
                         action: () {
-                          Navigator.of(context).pushReplacement(
-                            NavigatorScale(child: Login()),
-                          );
+                          Navigator.of(context).pushAndRemoveUntil(
+                              NavigatorScale(child: Login()),
+                              (Route<dynamic> route) => false);
                         },
                       ),
                       FlexSpace(50),
