@@ -6,7 +6,7 @@ class NavigatorScale extends PageRouteBuilder {
   NavigatorScale({
     required this.child,
   }) : super(
-          transitionDuration: Duration(seconds: 1),
+          transitionDuration: Duration(milliseconds: 500),
           pageBuilder: (context, animation, secondaryAnimation) => child,
         );
 

@@ -137,7 +137,7 @@ class _OnBoardingState extends State<OnBoarding>
                         Flexible(
                             flex: 200,
                             child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 1000),
+                              duration: Duration(milliseconds: 500),
                               transitionBuilder:
                                   (Widget child, Animation<double> animation) {
                                 return ScaleTransition(

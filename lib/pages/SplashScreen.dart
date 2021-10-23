@@ -1,7 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool lightMode =
@@ -11,9 +23,10 @@ class SplashScreen extends StatelessWidget {
           ? Color(0xFF404040).withOpacity(1.0)
           : Color(0xFF404040).withOpacity(1.0),
       body: Center(
-          child: lightMode
-              ? Image.asset('assets/App_SplashScreen.png')
-              : Image.asset('assets/App_SplashScreen.png')),
+        child: lightMode
+            ? Image.asset('assets/App_SplashScreen.png')
+            : Image.asset('assets/App_SplashScreen.png'),
+      ),
     );
   }
 }

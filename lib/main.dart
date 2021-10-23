@@ -7,8 +7,6 @@ import 'package:gobat_app/pages/SplashScreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
   runApp(MyApp());
 }
 
@@ -16,9 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFF2F9FC),
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.light,
+      statusBarColor: Color(0xFFFFFFFF),
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.dark,
     ));
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
