@@ -7,11 +7,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/pages/Login.dart';
 import 'package:gobat_app/widgets/AlertNotification.dart';
 import 'package:gobat_app/widgets/DefaultTextField.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
+import 'package:gobat_app/widgets/NavigatorSlide.dart';
 import 'package:gobat_app/widgets/RatioButtonRounded.dart';
 
 class Register extends StatefulWidget {
@@ -35,6 +37,11 @@ class _RegisterState extends State<Register> {
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xFF000000),
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light,
+    ));
 
     users = [];
     _usernameNotAvailable = false;
@@ -82,6 +89,37 @@ class _RegisterState extends State<Register> {
                     }
                     return Container(width: 0, height: 0);
                   },
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: (MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).padding.top),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: AspectRatio(
+                            aspectRatio: 1080 / 682,
+                            child: SvgPicture.asset(
+                                "assets/Decoration_RegisterTop.svg"),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: AspectRatio(
+                            aspectRatio: 1080 / 522,
+                            child: SvgPicture.asset(
+                                "assets/Decoration_RegisterBottom.svg"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
@@ -413,11 +451,11 @@ class _RegisterState extends State<Register> {
                                                           ), () {
                                                         Navigator.of(context)
                                                             .push(
-                                                          MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    Login(),
-                                                          ),
+                                                          NavigatorSlide(
+                                                              child: Login(),
+                                                              direction:
+                                                                  AxisDirection
+                                                                      .left),
                                                         );
 
                                                         usernameController
@@ -489,7 +527,7 @@ class _RegisterState extends State<Register> {
                                               Flexible(
                                                 flex: 618,
                                                 child: AspectRatio(
-                                                  aspectRatio: 618 / 44,
+                                                  aspectRatio: 618 / 50,
                                                   child: SizedBox(
                                                     width: double.infinity,
                                                     height: double.infinity,
@@ -497,18 +535,29 @@ class _RegisterState extends State<Register> {
                                                       children: [
                                                         Flexible(
                                                             flex: 325,
-                                                            child: AutoSizeText(
-                                                                "Sudah memiliki akun ?",
-                                                                maxLines: 1,
-                                                                minFontSize: 1,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 100,
-                                                                  fontFamily:
-                                                                      "Folks",
-                                                                  color: Colors
-                                                                      .black,
-                                                                ))),
+                                                            child: Column(
+                                                              children: [
+                                                                FlexSpace(6),
+                                                                Flexible(
+                                                                  flex: 44,
+                                                                  child: AutoSizeText(
+                                                                      "Sudah memiliki akun ?",
+                                                                      maxLines:
+                                                                          1,
+                                                                      minFontSize:
+                                                                          1,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            100,
+                                                                        fontFamily:
+                                                                            "Folks",
+                                                                        color: Colors
+                                                                            .white,
+                                                                      )),
+                                                                ),
+                                                              ],
+                                                            )),
                                                         FlexSpace(18),
                                                         Flexible(
                                                           flex: 275,
@@ -538,10 +587,12 @@ class _RegisterState extends State<Register> {
                                                               Navigator.of(
                                                                       context)
                                                                   .push(
-                                                                MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          Login(),
+                                                                NavigatorSlide(
+                                                                  child:
+                                                                      Login(),
+                                                                  direction:
+                                                                      AxisDirection
+                                                                          .left,
                                                                 ),
                                                               );
                                                             },

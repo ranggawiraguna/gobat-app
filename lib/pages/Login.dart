@@ -21,6 +21,8 @@ import 'package:gobat_app/widgets/DefaultTextFieldSingle.dart';
 import 'package:gobat_app/widgets/DialogActionContainer.dart';
 import 'package:gobat_app/widgets/FlexButton.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
+import 'package:gobat_app/widgets/NavigatorScale.dart';
+import 'package:gobat_app/widgets/NavigatorSlide.dart';
 import 'package:gobat_app/widgets/RatioButtonRounded.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -46,6 +48,11 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xFF000000),
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light,
+    ));
 
     users = [];
     _invalidPassword = _passwordVisible = false;
@@ -92,6 +99,37 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                     }
                     return Container(width: 0, height: 0);
                   },
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: (MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).padding.top),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: AspectRatio(
+                            aspectRatio: 1080 / 682,
+                            child: SvgPicture.asset(
+                                "assets/Decoration_LoginTop.svg"),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: AspectRatio(
+                            aspectRatio: 1080 / 626,
+                            child: SvgPicture.asset(
+                                "assets/Decoration_LoginBottom.svg"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
@@ -223,7 +261,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                             flexTextWidth: 194,
                                             textContent: "Masuk",
                                             textColor: Colors.white,
-                                            buttonColor: Colors.black,
+                                            buttonColor: Color(0xFFFF583C),
                                             action: () {
                                               if (!_invalidUsername &&
                                                   !_invalidPassword) {
@@ -267,11 +305,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                             Navigator.of(
                                                                     context)
                                                                 .pushAndRemoveUntil(
-                                                                    MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              Main(),
-                                                                    ),
+                                                                    NavigatorScale(
+                                                                        child:
+                                                                            Main()),
                                                                     (Route<dynamic>
                                                                             route) =>
                                                                         false);
@@ -348,7 +384,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                               Flexible(
                                                 flex: 616,
                                                 child: AspectRatio(
-                                                  aspectRatio: 618 / 44,
+                                                  aspectRatio: 618 / 50,
                                                   child: SizedBox(
                                                     width: double.infinity,
                                                     height: double.infinity,
@@ -356,17 +392,29 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                       children: [
                                                         Flexible(
                                                           flex: 323,
-                                                          child: AutoSizeText(
-                                                            "Belum memiliki akun ?",
-                                                            maxLines: 1,
-                                                            minFontSize: 1,
-                                                            style: TextStyle(
-                                                              fontSize: 100,
-                                                              fontFamily:
-                                                                  "Folks",
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
+                                                          child: Column(
+                                                            children: [
+                                                              FlexSpace(6),
+                                                              Flexible(
+                                                                flex: 44,
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  "Belum memiliki akun ?",
+                                                                  maxLines: 1,
+                                                                  minFontSize:
+                                                                      1,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        100,
+                                                                    fontFamily:
+                                                                        "Folks",
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                         FlexSpace(19),
@@ -395,13 +443,15 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                                       .all(0),
                                                             ),
                                                             onPressed: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          Register(),
-                                                                ),
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(
+                                                                NavigatorSlide(
+                                                                    child:
+                                                                        Register(),
+                                                                    direction:
+                                                                        AxisDirection
+                                                                            .right),
                                                               );
                                                             },
                                                           ),
@@ -593,7 +643,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                     backgroundColor:
                                                         Color(0xFFFFA000),
                                                     aspectRatio: 748 / 95,
-                                                    widthPercent: 0.76,
+                                                    widthPercent: 0.69,
                                                     iconPath:
                                                         "assets/Icon_WarningSnackbar.svg",
                                                     textContent:
