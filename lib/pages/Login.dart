@@ -416,7 +416,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                                       FontWeight
                                                                           .bold,
                                                                   color: Color(
-                                                                      0xFF0000FF),
+                                                                      0xFF2196F3),
                                                                 ),
                                                               ),
                                                               style: TextButton

@@ -568,7 +568,7 @@ class _RegisterState extends State<Register> {
                                                                     FontWeight
                                                                         .bold,
                                                                 color: Color(
-                                                                    0xFF0000FF),
+                                                                    0xFF2196F3),
                                                               ),
                                                             ),
                                                             style: TextButton

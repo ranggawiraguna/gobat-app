@@ -4,20 +4,17 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
 
-ScaffoldFeatureController<SnackBar, SnackBarClosedReason> AlertNotification({
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+    AlertNotification2_MultiLine({
   required BuildContext context,
   required Color backgroundColor,
   required double aspectRatio,
   required double widthPercent,
-  required String iconPath,
   required String textContent,
   required int flexContentVertical,
-  required int flexIconHorizontal,
   required int flexTextHorizontal,
-  required int textMaxLines,
   required int duration,
   Function()? nextAction,
 }) {
@@ -28,26 +25,19 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> AlertNotification({
         child: Center(
           child: Column(
             children: [
-              FlexSpace(24),
+              FlexSpace(30),
               Flexible(
                 flex: flexContentVertical,
                 child: Row(
                   children: [
-                    FlexSpace(25),
+                    FlexSpace(30),
                     Flexible(
-                        flex: flexIconHorizontal,
-                        child: AspectRatio(
-                          aspectRatio: 1 / 1,
-                          child: SvgPicture.asset(iconPath),
-                        )),
-                    FlexSpace(20),
-                    Flexible(
-                      flex: flexTextHorizontal,
+                      flex: ((flexTextHorizontal / 2).round()) - 3,
                       child: Center(
                         child: AutoSizeText(
-                          textContent,
+                          textContent.split("\n")[0],
                           textAlign: TextAlign.center,
-                          maxLines: textMaxLines,
+                          maxLines: 1,
                           minFontSize: 1,
                           style: TextStyle(
                             fontFamily: "Folks",
@@ -56,11 +46,36 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> AlertNotification({
                         ),
                       ),
                     ),
-                    FlexSpace(25),
+                    FlexSpace(30),
                   ],
                 ),
               ),
-              FlexSpace(24),
+              FlexSpace(6),
+              Flexible(
+                flex: flexContentVertical,
+                child: Row(
+                  children: [
+                    FlexSpace(30),
+                    Flexible(
+                      flex: ((flexTextHorizontal / 2).round()) - 3,
+                      child: Center(
+                        child: AutoSizeText(
+                          textContent.split("\n")[1],
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          minFontSize: 1,
+                          style: TextStyle(
+                            fontFamily: "Folks",
+                            fontSize: 100,
+                          ),
+                        ),
+                      ),
+                    ),
+                    FlexSpace(30),
+                  ],
+                ),
+              ),
+              FlexSpace(30),
             ],
           ),
         ),

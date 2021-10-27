@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class Reading extends StatefulWidget {
   @override
@@ -8,6 +9,6 @@ class Reading extends StatefulWidget {
 class _ReadingState extends State<Reading> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(color: Color(0xFFFF9F9F9));
   }
 }

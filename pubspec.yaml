@@ -63,11 +63,18 @@ flutter:
     - assets/Icon_ErrorSnackbar.svg
     - assets/Frame_DialogPrimary.svg
     - assets/Icon_CloseDialog.svg
+    - assets/Icon_ProfilePassword.svg
+    - assets/Icon_ProfileLove.svg
+    - assets/Icon_ProfileLogout.svg
+    - assets/Icon_ProfileHistory.svg
+    - assets/Icon_ProfileAccount.svg
+    - assets/Icon_ArrowRight.svg
     - assets/Illustration_SendMailSuccess.svg
     - assets/Decoration_LoginTop.svg
     - assets/Decoration_LoginBottom.svg
     - assets/Decoration_RegisterTop.svg
     - assets/Decoration_RegisterBottom.svg
+    - assets/Photo_DefaultProfileUser.svg
 
   fonts:
     - family: Folks
