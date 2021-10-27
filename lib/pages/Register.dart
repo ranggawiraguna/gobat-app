@@ -52,7 +52,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    List<User> users = Provider.of<List<User>>(context);
+    List<User> users = (Provider.of<List<User>>(context));
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -405,17 +405,15 @@ class _RegisterState extends State<Register> {
                                                   emailController.text
                                                       .contains("@gmail.com")) {
                                                 FirestoreService()
-                                                    .firestore
-                                                    .collection("users")
-                                                    .add({
-                                                  'username':
+                                                    .addUser(User.newUser(
+                                                  username:
                                                       usernameController.text,
-                                                  'password':
+                                                  password:
                                                       passwordController.text,
-                                                  'fullname':
+                                                  fullname:
                                                       fullnameController.text,
-                                                  'email': emailController.text
-                                                });
+                                                  email: emailController.text,
+                                                ));
 
                                                 AlertNotification(
                                                     context: context,

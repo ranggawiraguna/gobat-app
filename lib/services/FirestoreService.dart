@@ -6,6 +6,11 @@ import 'package:gobat_app/models/User.dart';
 class FirestoreService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  T? cast<T>(x) => x is T ? x : null;
+
+  void addUser(Map<String, dynamic> user) =>
+      firestore.collection("users").add(user);
+
   Stream<List<User>> get users => firestore.collection("users").snapshots().map(
         (QuerySnapshot querySnapshot) => querySnapshot.docs
             .map(
@@ -15,8 +20,22 @@ class FirestoreService {
                 password: documentSnapshot.get("password"),
                 fullname: documentSnapshot.get("fullname"),
                 email: documentSnapshot.get("email"),
-                favorites: documentSnapshot.get("favorites"),
-                views: documentSnapshot.get("views"),
+                favorites: Map<String, List<dynamic>>.from(
+                  documentSnapshot.get("favorites"),
+                ).map(
+                  (key, value) => MapEntry(
+                    key,
+                    List<String>.from(value),
+                  ),
+                ),
+                views: Map<String, List<dynamic>>.from(
+                  documentSnapshot.get("views"),
+                ).map(
+                  (key, value) => MapEntry(
+                    key,
+                    List<String>.from(value),
+                  ),
+                ),
               ),
             )
             .toList(),
@@ -34,8 +53,22 @@ class FirestoreService {
                           password: documentSnapshot.get("password"),
                           fullname: documentSnapshot.get("fullname"),
                           email: documentSnapshot.get("email"),
-                          favorites: documentSnapshot.get("favorites"),
-                          views: documentSnapshot.get("views"),
+                          favorites: Map<String, List<dynamic>>.from(
+                            documentSnapshot.get("favorites"),
+                          ).map(
+                            (key, value) => MapEntry(
+                              key,
+                              List<String>.from(value),
+                            ),
+                          ),
+                          views: Map<String, List<dynamic>>.from(
+                            documentSnapshot.get("views"),
+                          ).map(
+                            (key, value) => MapEntry(
+                              key,
+                              List<String>.from(value),
+                            ),
+                          ),
                         );
                       }
                     })
@@ -50,71 +83,92 @@ class FirestoreService {
                 User.empty,
           );
 
-  Stream<List<Article>> get articles =>
-      firestore.collection("articles").snapshots().map(
-            (QuerySnapshot querySnapshot) => querySnapshot.docs
-                .map(
-                  (DocumentSnapshot documentSnapshot) => Article(
-                    id: documentSnapshot.id,
-                    counter: documentSnapshot.get("counter"),
-                    information: documentSnapshot.get("information"),
-                  ),
-                )
-                .toList(),
-          );
+  Stream<List<Article>> get articles => firestore
+      .collection("articles")
+      .snapshots()
+      .map(
+        (QuerySnapshot querySnapshot) => querySnapshot.docs
+            .map(
+              (DocumentSnapshot documentSnapshot) => Article(
+                id: documentSnapshot.id,
+                counter: Map<String, int>.from(documentSnapshot.get("counter"))
+                    .map((key, value) => MapEntry(key, cast<int>(value) ?? 0)),
+                information: Map<String, dynamic>.from(
+                    documentSnapshot.get("information")),
+              ),
+            )
+            .toList(),
+      );
 
-  Stream<List<Article>> article(String articleId) =>
-      firestore.collection("articles").snapshots().map(
-            (QuerySnapshot querySnapshot) =>
-                querySnapshot.docs
-                    .map((DocumentSnapshot documentSnapshot) {
-                      if (documentSnapshot.id == articleId) {
-                        return Article(
-                          id: documentSnapshot.id,
-                          counter: documentSnapshot.get("counter"),
-                          information: documentSnapshot.get("information"),
-                        );
-                      }
-                    })
-                    .toList()
-                    .reduce((value, element) {
-                      if ((element != null) && (element.id == articleId))
-                        return element;
-                    }) ??
-                Article.empty,
-          );
+  Stream<List<Article>> article(String articleId) => firestore
+      .collection("articles")
+      .snapshots()
+      .map(
+        (QuerySnapshot querySnapshot) =>
+            querySnapshot.docs
+                .map((DocumentSnapshot documentSnapshot) {
+                  if (documentSnapshot.id == articleId) {
+                    return Article(
+                      id: documentSnapshot.id,
+                      counter:
+                          Map<String, int>.from(documentSnapshot.get("counter"))
+                              .map((key, value) =>
+                                  MapEntry(key, cast<int>(value) ?? 0)),
+                      information: Map<String, dynamic>.from(
+                          documentSnapshot.get("information")),
+                    );
+                  }
+                })
+                .toList()
+                .reduce((value, element) {
+                  if ((element != null) && (element.id == articleId))
+                    return element;
+                }) ??
+            Article.empty,
+      );
 
-  Stream<List<Product>> get products =>
-      firestore.collection("products").snapshots().map(
-            (QuerySnapshot querySnapshot) => querySnapshot.docs
-                .map(
-                  (DocumentSnapshot documentSnapshot) => Product(
-                    id: documentSnapshot.id,
-                    counter: documentSnapshot.get("counter"),
-                    information: documentSnapshot.get("infromation"),
-                  ),
-                )
-                .toList(),
-          );
+  Stream<List<Product>> get products => firestore
+      .collection("products")
+      .snapshots()
+      .map(
+        (QuerySnapshot querySnapshot) => querySnapshot.docs
+            .map(
+              (DocumentSnapshot documentSnapshot) => Product(
+                id: documentSnapshot.id,
+                counter: Map<String, int>.from(documentSnapshot.get("counter"))
+                    .map((key, value) => MapEntry(key, cast<int>(value) ?? 0)),
+                information: Map<String, dynamic>.from(
+                    documentSnapshot.get("information")),
+              ),
+            )
+            .toList(),
+      );
 
-  Stream<List<Product>> product(String productId) =>
-      firestore.collection("products").snapshots().map(
-            (QuerySnapshot querySnapshot) =>
-                querySnapshot.docs
-                    .map((DocumentSnapshot documentSnapshot) {
-                      if (documentSnapshot.id == productId) {
-                        return Product(
-                          id: documentSnapshot.id,
-                          counter: documentSnapshot.get("counter"),
-                          information: documentSnapshot.get("infromation"),
-                        );
-                      }
-                    })
-                    .toList()
-                    .reduce((value, element) {
-                      if ((element != null) && (element.id == productId))
-                        return element;
-                    }) ??
-                Product.empty,
-          );
+  Stream<List<Product>> product(String productId) => firestore
+      .collection("products")
+      .snapshots()
+      .map(
+        (QuerySnapshot querySnapshot) =>
+            querySnapshot.docs
+                .map((DocumentSnapshot documentSnapshot) {
+                  if (documentSnapshot.id == productId) {
+                    return Product(
+                      id: documentSnapshot.id,
+                      counter:
+                          Map<String, int>.from(documentSnapshot.get("counter"))
+                              .map((key, value) =>
+                                  MapEntry(key, cast<int>(value) ?? 0)),
+                      information: Map<String, dynamic>.from(
+                        documentSnapshot.get("information"),
+                      ),
+                    );
+                  }
+                })
+                .toList()
+                .reduce((value, element) {
+                  if ((element != null) && (element.id == productId))
+                    return element;
+                }) ??
+            Product.empty,
+      );
 }

@@ -64,7 +64,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<User> users = Provider.of<List<User>>(context);
+    List<User> users = (Provider.of<List<User>>(context));
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -614,7 +614,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                 buttonRadius: 6,
                                                 action: () {
                                                   if (!_invalidUsername2) {
-                                                    for (User user in users) {
+                                                    for (User user in (Provider
+                                                        .of<List<User>>(
+                                                            context))) {
                                                       if (user.username ==
                                                           usernameController2
                                                               .text) {
@@ -757,7 +759,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                   child: AutoSizeText(
                                                     (() {
                                                       if (!_invalidUsername2)
-                                                        for (User user in users)
+                                                        for (User user
+                                                            in (Provider.of<
+                                                                    List<User>>(
+                                                                context)))
                                                           if (user.username ==
                                                               usernameController2
                                                                   .text)
@@ -825,7 +830,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                 buttonRadius: 6,
                                                 action: () async {
                                                   if (!_invalidUsername2) {
-                                                    for (User user in users) {
+                                                    for (User user in (Provider
+                                                        .of<List<User>>(
+                                                            context))) {
                                                       if (user.username ==
                                                           usernameController2
                                                               .text) {

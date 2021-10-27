@@ -12,6 +12,21 @@ class User {
     required this.views,
   });
 
+  static Map<String, dynamic> newUser({
+    required String username,
+    required String password,
+    required String fullname,
+    required String email,
+  }) =>
+      {
+        "username": username,
+        "password": password,
+        "fullname": fullname,
+        "email": email,
+        "favorites": {"articles": [], "products": []},
+        "views": {"articles": [], "products": []},
+      };
+
   static get empty => User(
         id: "",
         username: "",
