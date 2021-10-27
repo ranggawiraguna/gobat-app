@@ -1,17 +1,28 @@
 class Article {
-  final String id, title, description;
+  final String id;
+  final Map<String, int> counter;
+  final Map<String, dynamic> information;
 
   Article({
     required this.id,
-    required this.title,
-    required this.description,
+    required this.counter,
+    required this.information,
   });
 
-  static get empty => Article(id: "", title: "", description: "");
+  static get empty => Article(
+        id: "",
+        counter: {"favorite": 0, "view": 0},
+        information: {
+          "title": "",
+          "description": "",
+          "image": "",
+          "date_post": "",
+        },
+      );
 
   Map<String, dynamic> toJson() => {
         "id": this.id,
-        "title": this.title,
-        "description": this.description,
+        "counter": this.counter,
+        "information": this.information,
       };
 }

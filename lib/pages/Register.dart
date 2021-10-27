@@ -398,7 +398,7 @@ class _RegisterState extends State<Register> {
                                             flexTextWidth: 194,
                                             textContent: "Daftar",
                                             textColor: Colors.white,
-                                            buttonColor: Colors.black,
+                                            buttonColor: Color(0xFFFF583C),
                                             action: () {
                                               if (!_usernameNotAvailable &&
                                                   _passwordStrength == "Kuat" &&

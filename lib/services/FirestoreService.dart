@@ -15,6 +15,8 @@ class FirestoreService {
                 password: documentSnapshot.get("password"),
                 fullname: documentSnapshot.get("fullname"),
                 email: documentSnapshot.get("email"),
+                favorites: documentSnapshot.get("favorites"),
+                views: documentSnapshot.get("views"),
               ),
             )
             .toList(),
@@ -32,6 +34,8 @@ class FirestoreService {
                           password: documentSnapshot.get("password"),
                           fullname: documentSnapshot.get("fullname"),
                           email: documentSnapshot.get("email"),
+                          favorites: documentSnapshot.get("favorites"),
+                          views: documentSnapshot.get("views"),
                         );
                       }
                     })
@@ -52,8 +56,8 @@ class FirestoreService {
                 .map(
                   (DocumentSnapshot documentSnapshot) => Article(
                     id: documentSnapshot.id,
-                    title: documentSnapshot.get("title"),
-                    description: documentSnapshot.get("description"),
+                    counter: documentSnapshot.get("counter"),
+                    information: documentSnapshot.get("information"),
                   ),
                 )
                 .toList(),
@@ -67,8 +71,8 @@ class FirestoreService {
                       if (documentSnapshot.id == articleId) {
                         return Article(
                           id: documentSnapshot.id,
-                          title: documentSnapshot.get("title"),
-                          description: documentSnapshot.get("description"),
+                          counter: documentSnapshot.get("counter"),
+                          information: documentSnapshot.get("information"),
                         );
                       }
                     })
@@ -86,8 +90,8 @@ class FirestoreService {
                 .map(
                   (DocumentSnapshot documentSnapshot) => Product(
                     id: documentSnapshot.id,
-                    name: documentSnapshot.get("name"),
-                    description: documentSnapshot.get("description"),
+                    counter: documentSnapshot.get("counter"),
+                    information: documentSnapshot.get("infromation"),
                   ),
                 )
                 .toList(),
@@ -101,8 +105,8 @@ class FirestoreService {
                       if (documentSnapshot.id == productId) {
                         return Product(
                           id: documentSnapshot.id,
-                          name: documentSnapshot.get("name"),
-                          description: documentSnapshot.get("description"),
+                          counter: documentSnapshot.get("counter"),
+                          information: documentSnapshot.get("infromation"),
                         );
                       }
                     })
