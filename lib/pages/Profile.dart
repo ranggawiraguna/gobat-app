@@ -3,7 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/models/User.dart';
+import 'package:gobat_app/pages/ActivityHistory.dart';
+import 'package:gobat_app/pages/ChangePassword.dart';
+import 'package:gobat_app/pages/ListFavorite.dart';
 import 'package:gobat_app/pages/Login.dart';
+import 'package:gobat_app/pages/MyAccount.dart';
 import 'package:gobat_app/services/AccountSessionManager.dart';
 import 'package:gobat_app/services/FirestoreService.dart';
 import 'package:gobat_app/services/NavigatorServices.dart';
@@ -203,24 +207,85 @@ class _ProfileState extends State<Profile> {
                                       child: Column(
                                         children: [
                                           MenuItemProfile(
-                                              "assets/Icon_ProfileAccount.svg",
-                                              "Akun Saya",
-                                              () {}),
+                                            "assets/Icon_ProfileAccount.svg",
+                                            "Akun Saya",
+                                            () {
+                                              AccountSessionManager()
+                                                  .getActiveUserId()
+                                                  .then(
+                                                    (userId) =>
+                                                        Navigator.of(context)
+                                                            .push(
+                                                      NavigatorSlide(
+                                                          child: StreamProvider<
+                                                              User>.value(
+                                                            value:
+                                                                FirestoreService()
+                                                                    .user(
+                                                                        userId ??
+                                                                            ""),
+                                                            initialData:
+                                                                User.empty,
+                                                            child: MyAccount(),
+                                                          ),
+                                                          direction:
+                                                              AxisDirection
+                                                                  .right),
+                                                    ),
+                                                  );
+                                            },
+                                          ),
                                           FlexSpace(50),
                                           MenuItemProfile(
                                               "assets/Icon_ProfileLove.svg",
-                                              "Favorit Saya",
-                                              () {}),
+                                              "Favorit Saya", () {
+                                            Navigator.of(context).push(
+                                                NavigatorSlide(
+                                                    child: ListFavorite(),
+                                                    direction:
+                                                        AxisDirection.right));
+                                          }),
                                           FlexSpace(50),
                                           MenuItemProfile(
                                               "assets/Icon_ProfileHistory.svg",
-                                              "Riwayat Aktivitas",
-                                              () {}),
+                                              "Riwayat Aktivitas", () {
+                                            Navigator.of(context).push(
+                                                NavigatorSlide(
+                                                    child: ActivityHistory(),
+                                                    direction:
+                                                        AxisDirection.right));
+                                          }),
                                           FlexSpace(50),
                                           MenuItemProfile(
-                                              "assets/Icon_ProfilePassword.svg",
-                                              "Ubah Password",
-                                              () {}),
+                                            "assets/Icon_ProfilePassword.svg",
+                                            "Ubah Password",
+                                            () {
+                                              AccountSessionManager()
+                                                  .getActiveUserId()
+                                                  .then(
+                                                    (userId) =>
+                                                        Navigator.of(context)
+                                                            .push(
+                                                      NavigatorSlide(
+                                                          child: StreamProvider<
+                                                              User>.value(
+                                                            value:
+                                                                FirestoreService()
+                                                                    .user(
+                                                                        userId ??
+                                                                            ""),
+                                                            initialData:
+                                                                User.empty,
+                                                            child:
+                                                                ChangePassword(),
+                                                          ),
+                                                          direction:
+                                                              AxisDirection
+                                                                  .right),
+                                                    ),
+                                                  );
+                                            },
+                                          ),
                                           FlexSpace(50),
                                           MenuItemProfile(
                                               "assets/Icon_ProfileLogout.svg",

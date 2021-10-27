@@ -68,7 +68,8 @@ flutter:
     - assets/Icon_ProfileLogout.svg
     - assets/Icon_ProfileHistory.svg
     - assets/Icon_ProfileAccount.svg
-    - assets/Icon_ArrowRight.svg
+    - assets/Icon_ArrowNext.svg
+    - assets/Icon_ArrowBack.svg
     - assets/Illustration_SendMailSuccess.svg
     - assets/Decoration_LoginTop.svg
     - assets/Decoration_LoginBottom.svg

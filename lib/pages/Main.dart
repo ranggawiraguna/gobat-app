@@ -15,16 +15,12 @@ import 'package:gobat_app/services/FirestoreService.dart';
 import 'package:provider/provider.dart';
 
 class Main extends StatefulWidget {
-  final int? intialPage;
-
-  Main({Key? key, this.intialPage}) : super(key: key);
-
   @override
   _MainState createState() => _MainState();
 }
 
 class _MainState extends State<Main> {
-  late int _page;
+  int _page = 2;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   String? _userId;
 
@@ -33,7 +29,6 @@ class _MainState extends State<Main> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
 
-    _page = widget.intialPage ?? 2;
     AccountSessionManager()
         .isUserLoggedIn()
         .then((value) => AccountSessionManager().getActiveUserId().then(
@@ -83,9 +78,9 @@ class _MainState extends State<Main> {
             ],
             color: Colors.black,
             buttonBackgroundColor: Colors.black,
-            backgroundColor: Colors.white,
+            backgroundColor: Color(0xFFF9F9F9),
             animationCurve: Curves.easeInOut,
-            animationDuration: Duration(milliseconds: 600),
+            animationDuration: Duration(milliseconds: 500),
             onTap: (index) {
               setState(() {
                 _page = index;

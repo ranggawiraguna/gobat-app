@@ -44,8 +44,7 @@ Flexible MenuItemProfile(String iconPath, String name, Function nextAction) =>
             ),
             FlexSpace(50),
             Flexible(
-                flex: 50,
-                child: SvgPicture.asset("assets/Icon_ArrowRight.svg")),
+                flex: 50, child: SvgPicture.asset("assets/Icon_ArrowNext.svg")),
           ],
         ),
         style: ElevatedButton.styleFrom(
