@@ -3,18 +3,19 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/pages/Login.dart';
+import 'package:gobat_app/services/FirestoreService.dart';
+import 'package:gobat_app/services/NavigatorServices.dart';
 import 'package:gobat_app/widgets/AlertNotification.dart';
 import 'package:gobat_app/widgets/DefaultTextField.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
-import 'package:gobat_app/widgets/NavigatorSlide.dart';
 import 'package:gobat_app/widgets/RatioButtonRounded.dart';
+import 'package:provider/provider.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -31,8 +32,6 @@ class _RegisterState extends State<Register> {
 
   late String? _passwordStrength;
 
-  late List<User> users;
-
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
@@ -43,7 +42,6 @@ class _RegisterState extends State<Register> {
       statusBarBrightness: Brightness.light,
     ));
 
-    users = [];
     _usernameNotAvailable = false;
     _emailIncorrect = false;
     _passwordIncorrect = false;
@@ -54,8 +52,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference userNode =
-        (FirebaseFirestore.instance).collection("users");
+    List<User> users = Provider.of<List<User>>(context);
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -70,26 +67,6 @@ class _RegisterState extends State<Register> {
             physics: ClampingScrollPhysics(),
             child: Stack(
               children: [
-                StreamBuilder<QuerySnapshot>(
-                  stream: userNode.snapshots(),
-                  builder: (_, snapshot) {
-                    if (snapshot.hasData) {
-                      users.clear();
-                      users.addAll(
-                        snapshot.data!.docs
-                            .map((element) => new User(
-                                  id: element.id,
-                                  username: element.get("username"),
-                                  password: element.get("password"),
-                                  fullname: element.get("fullname"),
-                                  email: element.get("email"),
-                                ))
-                            .toList(),
-                      );
-                    }
-                    return Container(width: 0, height: 0);
-                  },
-                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: (MediaQuery.of(context).size.height -
@@ -284,8 +261,13 @@ class _RegisterState extends State<Register> {
                                             child: child, opacity: animation);
                                       },
                                       child: _passwordStrength == null
-                                          ? FlexSpace(0)
-                                          : AspectRatio(aspectRatio: 880 / 16)),
+                                          ? Container(
+                                              key: ValueKey<int>(0),
+                                              width: 0,
+                                              height: 0)
+                                          : AspectRatio(
+                                              key: ValueKey<int>(1),
+                                              aspectRatio: 880 / 16)),
                                   AnimatedSwitcher(
                                     duration: Duration(milliseconds: 0),
                                     transitionBuilder: (Widget child,
@@ -294,7 +276,10 @@ class _RegisterState extends State<Register> {
                                           child: child, opacity: animation);
                                     },
                                     child: _passwordStrength == null
-                                        ? FlexSpace(0)
+                                        ? Container(
+                                            key: ValueKey<int>(0),
+                                            width: 0,
+                                            height: 0)
                                         : SizedBox(
                                             key: ValueKey<int>(1),
                                             width: double.infinity,
@@ -419,7 +404,10 @@ class _RegisterState extends State<Register> {
                                                   _passwordStrength == "Kuat" &&
                                                   emailController.text
                                                       .contains("@gmail.com")) {
-                                                userNode.add({
+                                                FirestoreService()
+                                                    .firestore
+                                                    .collection("users")
+                                                    .add({
                                                   'username':
                                                       usernameController.text,
                                                   'password':
@@ -452,7 +440,15 @@ class _RegisterState extends State<Register> {
                                                         Navigator.of(context)
                                                             .push(
                                                           NavigatorSlide(
-                                                              child: Login(),
+                                                              child: StreamProvider<
+                                                                  List<
+                                                                      User>>.value(
+                                                                value:
+                                                                    FirestoreService()
+                                                                        .users,
+                                                                initialData: [],
+                                                                child: Login(),
+                                                              ),
                                                               direction:
                                                                   AxisDirection
                                                                       .left),
@@ -588,8 +584,15 @@ class _RegisterState extends State<Register> {
                                                                       context)
                                                                   .push(
                                                                 NavigatorSlide(
-                                                                  child:
-                                                                      Login(),
+                                                                  child: StreamProvider<
+                                                                      List<
+                                                                          User>>.value(
+                                                                    value: FirestoreService()
+                                                                        .users,
+                                                                    initialData: [],
+                                                                    child:
+                                                                        Login(),
+                                                                  ),
                                                                   direction:
                                                                       AxisDirection
                                                                           .left,

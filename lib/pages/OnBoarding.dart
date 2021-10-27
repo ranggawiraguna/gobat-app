@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/pages/Login.dart';
 import 'package:gobat_app/pages/Register.dart';
+import 'package:gobat_app/services/FirestoreService.dart';
+import 'package:gobat_app/services/NavigatorServices.dart';
 import 'package:gobat_app/widgets/FlexButton.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
-import 'package:gobat_app/widgets/NavigatorScale.dart';
 import 'package:gobat_app/widgets/OnBoardingSlide.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
+import 'package:provider/provider.dart';
 
 class OnBoarding extends StatefulWidget {
   @override
@@ -188,7 +191,13 @@ class _OnBoardingState extends State<OnBoarding>
                         buttonRadius: 6,
                         action: () {
                           Navigator.of(context).pushAndRemoveUntil(
-                              NavigatorScale(child: Login()),
+                              NavigatorScale(
+                                child: StreamProvider<List<User>>.value(
+                                  value: FirestoreService().users,
+                                  initialData: [],
+                                  child: Login(),
+                                ),
+                              ),
                               (Route<dynamic> route) => false);
                         },
                       ),
@@ -205,7 +214,13 @@ class _OnBoardingState extends State<OnBoarding>
                         buttonRadius: 6,
                         action: () {
                           Navigator.of(context).pushReplacement(
-                            NavigatorScale(child: Register()),
+                            NavigatorScale(
+                              child: StreamProvider<List<User>>.value(
+                                value: FirestoreService().users,
+                                initialData: [],
+                                child: Register(),
+                              ),
+                            ),
                           );
                         },
                       ),

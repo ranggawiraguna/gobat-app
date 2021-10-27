@@ -18,13 +18,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late bool isUserLoggedIn;
+  String? _userId;
 
   @override
-  void initState() {
-    AccountSessionManager().isUserLoggedIn().then((value) {
-      setState(() => isUserLoggedIn = value);
-    });
+  initState() {
+    AccountSessionManager()
+        .isUserLoggedIn()
+        .then((value) => AccountSessionManager().getActiveUserId().then(
+              (value) => setState(() => _userId = value),
+            ));
     super.initState();
   }
 
@@ -39,7 +41,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           home: (snapshot.connectionState == ConnectionState.waiting)
               ? SplashScreen()
-              : isUserLoggedIn
+              : _userId != null
                   ? Main()
                   : OnBoarding(),
           debugShowCheckedModeBanner: false,

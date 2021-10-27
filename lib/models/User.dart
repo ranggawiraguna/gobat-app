@@ -8,6 +8,9 @@ class User {
       required this.fullname,
       required this.email});
 
+  static get empty =>
+      User(id: "", username: "", password: "", fullname: "", email: "");
+
   Map<String, dynamic> toJson() => {
         "id": this.id,
         "username": this.username,

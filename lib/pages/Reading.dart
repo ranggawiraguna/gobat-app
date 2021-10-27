@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 
-class Article extends StatefulWidget {
+class Reading extends StatefulWidget {
   @override
-  _ArticleState createState() => _ArticleState();
+  _ReadingState createState() => _ReadingState();
 }
 
-class _ArticleState extends State<Article> {
+class _ReadingState extends State<Reading> {
   @override
   Widget build(BuildContext context) {
     return Container();
