@@ -11,6 +11,7 @@ GestureDetector SubProfileContainer({
   required String title,
   required Widget child,
   required bool makeClearFocus,
+  AppBar? appBar,
 }) {
   Future.delayed(Duration(milliseconds: 1))
       .then((_) => SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -26,11 +27,12 @@ GestureDetector SubProfileContainer({
     child: SafeArea(
       child: Container(
         child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 0,
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-          ),
+          appBar: appBar ??
+              AppBar(
+                toolbarHeight: 0,
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+              ),
           body: Stack(
             children: [
               SizedBox(
@@ -48,21 +50,31 @@ GestureDetector SubProfileContainer({
                               FlexSpace(40),
                               Flexible(
                                 flex: 60,
-                                child: Center(
-                                  child: AspectRatio(
-                                    aspectRatio: 1 / 1,
-                                    child: ElevatedButton(
-                                      child: SvgPicture.asset(
-                                          "assets/Icon_ArrowBack.svg"),
-                                      style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.all(0),
-                                        primary: Colors.transparent,
-                                        shadowColor: Colors.transparent,
+                                child: Column(
+                                  children: [
+                                    FlexSpace(35),
+                                    Flexible(
+                                      flex: 50,
+                                      child: Center(
+                                        child: AspectRatio(
+                                          aspectRatio: 1 / 1,
+                                          child: ElevatedButton(
+                                            child: SvgPicture.asset(
+                                                "assets/Icon_ArrowBack.svg"),
+                                            style: ElevatedButton.styleFrom(
+                                              padding: EdgeInsets.all(0),
+                                              primary: Colors.transparent,
+                                              shadowColor: Colors.transparent,
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(context),
+                                          ),
+                                        ),
                                       ),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(context),
                                     ),
-                                  ),
+                                    FlexSpace(35),
+                                  ],
                                 ),
                               ),
                               FlexSpace(50),

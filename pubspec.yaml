@@ -77,6 +77,7 @@ flutter:
     - assets/Decoration_RegisterBottom.svg
     - assets/Photo_DefaultProfileUser.svg
     - assets/Icon_EditImage.svg
+    - assets/ChangePassword_Illustration.svg
 
   fonts:
     - family: Folks
