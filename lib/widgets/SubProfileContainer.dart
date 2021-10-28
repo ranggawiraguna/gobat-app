@@ -11,7 +11,9 @@ GestureDetector SubProfileContainer({
   required String title,
   required Widget child,
   required bool makeClearFocus,
-  AppBar? appBar,
+  required bool withAppBar,
+  int? indexTabSelected,
+  List<Function>? tabActions,
 }) {
   Future.delayed(Duration(milliseconds: 1))
       .then((_) => SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -27,12 +29,11 @@ GestureDetector SubProfileContainer({
     child: SafeArea(
       child: Container(
         child: Scaffold(
-          appBar: appBar ??
-              AppBar(
-                toolbarHeight: 0,
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
+          appBar: AppBar(
+            toolbarHeight: 0,
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+          ),
           body: Stack(
             children: [
               SizedBox(
@@ -107,10 +108,216 @@ GestureDetector SubProfileContainer({
                             ],
                           ),
                         )),
-                    Expanded(
-                      child: SingleChildScrollView(
-                          physics: ClampingScrollPhysics(), child: child),
-                    ),
+                    withAppBar
+                        ? Expanded(
+                            child: Column(
+                              children: [
+                                AspectRatio(
+                                  aspectRatio: 1080 / 120,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF404040),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0x33404040),
+                                            blurRadius: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                (9 / 1080),
+                                          ),
+                                          BoxShadow(
+                                              color: Color(0x66404040),
+                                              blurRadius: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  (9 / 1080),
+                                              offset: Offset(
+                                                  0,
+                                                  MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      (12 / 1080)))
+                                        ]),
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          flex: 1,
+                                          child: Column(
+                                            children: [
+                                              FlexSpace(20),
+                                              Flexible(
+                                                  flex: 72,
+                                                  child: AspectRatio(
+                                                    aspectRatio: 1 / 1,
+                                                    child: ElevatedButton(
+                                                      child: AnimatedSwitcher(
+                                                        duration: Duration(
+                                                            milliseconds: 500),
+                                                        child: indexTabSelected !=
+                                                                    null &&
+                                                                indexTabSelected ==
+                                                                    0
+                                                            ? Icon(
+                                                                Icons
+                                                                    .medication,
+                                                                color: Colors
+                                                                    .white,
+                                                                key: ValueKey<
+                                                                    int>(0),
+                                                              )
+                                                            : Icon(
+                                                                Icons
+                                                                    .medication,
+                                                                color: Color(
+                                                                    0x32FFFFFF),
+                                                                key: ValueKey<
+                                                                    int>(1),
+                                                              ),
+                                                      ),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        padding:
+                                                            EdgeInsets.all(0),
+                                                        primary:
+                                                            Colors.transparent,
+                                                        shadowColor:
+                                                            Colors.transparent,
+                                                      ),
+                                                      onPressed: () {
+                                                        if (tabActions != null)
+                                                          tabActions[0]();
+                                                      },
+                                                    ),
+                                                  )),
+                                              FlexSpace(20),
+                                              Flexible(
+                                                flex: 8,
+                                                child: AnimatedSwitcher(
+                                                  duration: Duration(
+                                                      milliseconds: 500),
+                                                  child: (indexTabSelected !=
+                                                              null &&
+                                                          indexTabSelected == 0)
+                                                      ? Container(
+                                                          key: ValueKey<int>(0),
+                                                          color: Colors.white)
+                                                      : Container(
+                                                          key: ValueKey<int>(1),
+                                                          color: Colors
+                                                              .transparent),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Column(
+                                            children: [
+                                              FlexSpace(20),
+                                              Flexible(
+                                                  flex: 72,
+                                                  child: AspectRatio(
+                                                    aspectRatio: 1 / 1,
+                                                    child: ElevatedButton(
+                                                      child: AnimatedSwitcher(
+                                                        duration: Duration(
+                                                            milliseconds: 500),
+                                                        child: indexTabSelected !=
+                                                                    null &&
+                                                                indexTabSelected ==
+                                                                    1
+                                                            ? Icon(
+                                                                Icons.article,
+                                                                color: Colors
+                                                                    .white,
+                                                                key: ValueKey<
+                                                                    int>(0),
+                                                              )
+                                                            : Icon(
+                                                                Icons.article,
+                                                                color: Color(
+                                                                    0x32FFFFFF),
+                                                                key: ValueKey<
+                                                                    int>(1),
+                                                              ),
+                                                      ),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        padding:
+                                                            EdgeInsets.all(0),
+                                                        primary:
+                                                            Colors.transparent,
+                                                        shadowColor:
+                                                            Colors.transparent,
+                                                      ),
+                                                      onPressed: () {
+                                                        if (tabActions != null)
+                                                          tabActions[1]();
+                                                      },
+                                                    ),
+                                                  )),
+                                              FlexSpace(20),
+                                              Flexible(
+                                                flex: 8,
+                                                child: AnimatedSwitcher(
+                                                  duration: Duration(
+                                                      milliseconds: 500),
+                                                  child: (indexTabSelected !=
+                                                              null &&
+                                                          indexTabSelected == 1)
+                                                      ? Container(
+                                                          key: ValueKey<int>(0),
+                                                          color: Colors.white)
+                                                      : Container(
+                                                          key: ValueKey<int>(1),
+                                                          color: Colors
+                                                              .transparent),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    physics: ClampingScrollPhysics(),
+                                    child: Container(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            top: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.0463,
+                                            left: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.0463,
+                                            right: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.0463,
+                                            bottom: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.0926),
+                                        child: child,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        : Expanded(
+                            child: SingleChildScrollView(
+                              physics: ClampingScrollPhysics(),
+                              child: child,
+                            ),
+                          ),
                   ],
                 ),
               ),

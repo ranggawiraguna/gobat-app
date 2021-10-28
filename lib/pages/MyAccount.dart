@@ -45,6 +45,7 @@ class _MyAccountState extends State<MyAccount> {
     return SubProfileContainer(
       context: context,
       title: "Akun Saya",
+      withAppBar: false,
       child: Column(
         children: [
           AspectRatio(aspectRatio: 1080 / 75),

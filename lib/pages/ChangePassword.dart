@@ -36,6 +36,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     return SubProfileContainer(
       context: context,
       title: "Ubah Password",
+      withAppBar: false,
       child: Column(
         children: [
           AspectRatio(aspectRatio: 1080 / 75),

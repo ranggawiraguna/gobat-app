@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:gobat_app/models/Article.dart';
 import 'package:gobat_app/models/Product.dart';
@@ -14,6 +16,7 @@ class ListFavorite extends StatefulWidget {
 
 class _ListFavoriteState extends State<ListFavorite> {
   String? _userId;
+  int _indexTabSelected = 0;
 
   @override
   void initState() {
@@ -41,9 +44,36 @@ class _ListFavoriteState extends State<ListFavorite> {
       child: SubProfileContainer(
         context: context,
         title: "Riwayat Aktivitas",
-        child: Container(),
+        withAppBar: true,
+        indexTabSelected: _indexTabSelected,
+        tabActions: <Function>[
+          () => setState(() => _indexTabSelected = 0),
+          () => setState(() => _indexTabSelected = 1),
+        ],
+        child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 500),
+          child: (_indexTabSelected == 0)
+              ? TabPage_Products()
+              : TabPage_Articles(),
+        ),
         makeClearFocus: false,
       ),
     );
   }
+}
+
+Container TabPage_Products() {
+  return Container(
+    key: ValueKey<int>(0),
+    color: Colors.red,
+    height: 1000,
+  );
+}
+
+Container TabPage_Articles() {
+  return Container(
+    key: ValueKey<int>(1),
+    color: Colors.blue,
+    height: 1000,
+  );
 }
