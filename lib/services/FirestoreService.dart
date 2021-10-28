@@ -11,6 +11,19 @@ class FirestoreService {
   void addUser(Map<String, dynamic> user) =>
       firestore.collection("users").add(user);
 
+  void updateUser({
+    required String userId,
+    required Map<String, dynamic> newData,
+    Function? nextAction,
+  }) {
+    FirestoreService()
+        .firestore
+        .collection("users")
+        .doc(userId)
+        .update(newData)
+        .whenComplete(() => (nextAction != null) ? nextAction() : null);
+  }
+
   Stream<List<User>> get users => firestore.collection("users").snapshots().map(
         (QuerySnapshot querySnapshot) => querySnapshot.docs
             .map(

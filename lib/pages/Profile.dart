@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/pages/ActivityHistory.dart';
 import 'package:gobat_app/pages/ChangePassword.dart';
@@ -13,6 +12,7 @@ import 'package:gobat_app/services/FirestoreService.dart';
 import 'package:gobat_app/services/NavigatorServices.dart';
 import 'package:gobat_app/widgets/AlertNotification2_MultiLine.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
+import 'package:gobat_app/widgets/ImageProfile.dart';
 import 'package:gobat_app/widgets/InfoCounterProfile.dart';
 import 'package:gobat_app/widgets/MenuItemProfile.dart';
 import 'package:provider/provider.dart';
@@ -58,35 +58,13 @@ class _ProfileState extends State<Profile> {
                             FlexSpace(90),
                             Flexible(
                               flex: 310,
-                              child: AspectRatio(
-                                aspectRatio: 1 / 1,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                          MediaQuery.of(context).size.width *
-                                              0.084)),
-                                  child: Container(
-                                    color: Colors.white,
-                                    child: Container(
-                                      clipBehavior: Clip.hardEdge,
-                                      margin: EdgeInsets.all(
-                                          MediaQuery.of(context).size.width *
-                                              0.010),
-                                      child: SvgPicture.asset(
-                                          "assets/Photo_DefaultProfileUser.svg"),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(
-                                                MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.075)),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              child: ImageProfile(
+                                  context,
+                                  0.084,
+                                  0.075,
+                                  0.010,
+                                  Colors.white,
+                                  "assets/Photo_DefaultProfileUser.svg"),
                             ),
                             FlexSpace(45),
                             Flexible(
@@ -143,7 +121,12 @@ class _ProfileState extends State<Profile> {
                                   ),
                                   child: Row(
                                     children: [
-                                      InfoCounterProfile("Dilihat", 987),
+                                      InfoCounterProfile(
+                                          "Dilihat",
+                                          user.views.values
+                                              .toList()
+                                              .map((e) => e.length)
+                                              .fold(0, (a, b) => (a + b))),
                                       Flexible(
                                           flex: 5,
                                           child: Column(
@@ -157,7 +140,12 @@ class _ProfileState extends State<Profile> {
                                               FlexSpace(25),
                                             ],
                                           )),
-                                      InfoCounterProfile("Disukai", 123),
+                                      InfoCounterProfile(
+                                          "Disukai",
+                                          user.favorites.values
+                                              .toList()
+                                              .map((e) => e.length)
+                                              .fold(0, (a, b) => (a + b))),
                                     ],
                                   ),
                                 ),

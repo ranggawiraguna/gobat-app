@@ -12,10 +12,12 @@ SizedBox DefaultTextField({
   IconButton? iconSuffix,
   Function(String)? onChanged,
   String? errorText,
+  bool? readOnly,
 }) {
   return SizedBox(
     width: double.infinity,
     child: TextFormField(
+      readOnly: readOnly ?? false,
       obscureText: obscureText,
       scrollPadding: EdgeInsets.all(0),
       controller: controller,

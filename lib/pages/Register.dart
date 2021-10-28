@@ -402,8 +402,16 @@ class _RegisterState extends State<Register> {
                                             action: () {
                                               if (!_usernameNotAvailable &&
                                                   _passwordStrength == "Kuat" &&
-                                                  emailController.text
-                                                      .contains("@gmail.com")) {
+                                                  (emailController.text
+                                                          .substring(
+                                                              (emailController
+                                                                      .text
+                                                                      .length) -
+                                                                  10,
+                                                              emailController
+                                                                  .text
+                                                                  .length) ==
+                                                      "@gmail.com")) {
                                                 FirestoreService()
                                                     .addUser(User.newUser(
                                                   username:
@@ -486,8 +494,15 @@ class _RegisterState extends State<Register> {
                                                   duration: 3000,
                                                 );
 
-                                                if (!emailController.text
-                                                    .contains("@gmail.com")) {
+                                                if (!(emailController.text
+                                                        .substring(
+                                                            (emailController
+                                                                    .text
+                                                                    .length) -
+                                                                10,
+                                                            emailController
+                                                                .text.length) ==
+                                                    "@gmail.com")) {
                                                   setState(() {
                                                     _emailIncorrect = true;
                                                   });

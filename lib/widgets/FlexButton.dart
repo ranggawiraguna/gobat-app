@@ -33,13 +33,16 @@ Flexible FlexButton({
                   FlexSpace(innerSpaceHorizontal),
                   Flexible(
                     flex: flexTextHorizontal,
-                    child: AutoSizeText(
-                      textContent,
-                      style: TextStyle(
-                        fontSize: 100,
-                        fontFamily: "Folks",
-                        color: textColor,
-                        fontWeight: FontWeight.bold,
+                    child: Center(
+                      child: AutoSizeText(
+                        textContent,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 100,
+                          fontFamily: "Folks",
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
