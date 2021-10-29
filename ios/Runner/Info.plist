@@ -47,5 +47,11 @@
 		<string>http</string>
   	<string>message</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Description</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Description</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Description</string>
 </dict>
 </plist>

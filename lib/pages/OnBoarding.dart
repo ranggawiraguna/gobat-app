@@ -56,6 +56,8 @@ class _OnBoardingState extends State<OnBoarding>
   ];
 
   Container getButtonActionNext(key, begin, end, nextPage) {
+    bool _isClicked = false;
+
     return Container(
       key: ValueKey<int>(key),
       child: AspectRatio(
@@ -85,7 +87,8 @@ class _OnBoardingState extends State<OnBoarding>
                     padding: EdgeInsets.all(0),
                     shadowColor: Colors.transparent),
                 onPressed: () {
-                  if (nextPage >= 0 && nextPage <= 2) {
+                  if (nextPage >= 0 && nextPage <= 2 && !_isClicked) {
+                    _isClicked = true;
                     liquidController.shouldDisableGestures(disable: true);
                     liquidController.animateToPage(
                       page: nextPage,

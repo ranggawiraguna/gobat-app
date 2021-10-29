@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/models/User.dart';
@@ -8,6 +12,8 @@ import 'package:gobat_app/widgets/FlexButton.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
 import 'package:gobat_app/widgets/ImageProfile.dart';
 import 'package:gobat_app/widgets/SubProfileContainer.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class MyAccount extends StatefulWidget {
@@ -21,17 +27,66 @@ class _MyAccountState extends State<MyAccount> {
       fullnameController = TextEditingController(),
       emailController = TextEditingController();
 
-  late bool _emailIncorrect;
+  late bool _emailIncorrect, _inProgressUpdate;
+  late User user;
+  dynamic image;
+  File? imageFile;
 
   @override
   void initState() {
     _emailIncorrect = false;
+    _inProgressUpdate = false;
     super.initState();
+  }
+
+  Future<void> startImagePicker(String inputSource) async {
+    try {
+      File file = File((await ImagePicker().pickImage(
+              source: inputSource == 'camera'
+                  ? ImageSource.camera
+                  : ImageSource.gallery))!
+          .path);
+
+      File? croppedFile = await ImageCropper.cropImage(
+          sourcePath: file.path,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          androidUiSettings: AndroidUiSettings(
+              toolbarTitle: 'Potong Gambar',
+              toolbarColor: Color(0xFF404040),
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true),
+          iosUiSettings: IOSUiSettings(
+            title: 'Potong Gambar',
+          ));
+
+      setState(() {
+        image = Image.file(croppedFile ?? file);
+        imageFile = croppedFile ?? file;
+      });
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> updateUserProfile(
+      Map<String, dynamic> newData, Function nextAction) async {
+    try {
+      Reference ref = FirebaseStorage.instance.ref("/user_profile/" + user.id);
+      if (imageFile != null) {
+        await ref.putFile(imageFile!);
+        newData.addAll({"image": await ref.getDownloadURL()});
+      }
+      FirestoreService().updateUser(
+          userId: user.id, newData: newData, nextAction: nextAction);
+    } on FirebaseException catch (error) {
+      print(error);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<User>(context);
+    user = Provider.of<User>(context);
     if (usernameController.text != user.username &&
         passwordController.text != user.password &&
         fullnameController.text != user.fullname &&
@@ -40,6 +95,10 @@ class _MyAccountState extends State<MyAccount> {
       passwordController.text = user.password;
       fullnameController.text = user.fullname;
       emailController.text = user.email;
+      if (user.image != "")
+        image = Image(image: NetworkImage(user.image));
+      else
+        image = null;
     }
 
     return SubProfileContainer(
@@ -90,14 +149,18 @@ class _MyAccountState extends State<MyAccount> {
                                                             children: [
                                                               Flexible(
                                                                 flex: 375,
-                                                                child: ImageProfile(
-                                                                    context,
-                                                                    0.084,
-                                                                    0.075,
-                                                                    0.010,
-                                                                    Color(
-                                                                        0xFFE8E8E8),
-                                                                    "assets/Photo_DefaultProfileUser.svg"),
+                                                                child:
+                                                                    ImageProfile(
+                                                                  context,
+                                                                  0.084,
+                                                                  0.075,
+                                                                  0.010,
+                                                                  Color(
+                                                                      0xFFE8E8E8),
+                                                                  image ??
+                                                                      Image.asset(
+                                                                          "assets/Photo_DefaultProfileUser.png"),
+                                                                ),
                                                               ),
                                                               FlexSpace(25),
                                                             ],
@@ -136,8 +199,9 @@ class _MyAccountState extends State<MyAccount> {
                                                                           Colors
                                                                               .transparent,
                                                                     ),
-                                                                    onPressed:
-                                                                        () {},
+                                                                    onPressed: () =>
+                                                                        startImagePicker(
+                                                                            "gallery"),
                                                                   ),
                                                                 ),
                                                               ),
@@ -253,47 +317,62 @@ class _MyAccountState extends State<MyAccount> {
                                     MediaQuery.of(context).size.width *
                                         (20 / 1080),
                                 action: () {
-                                  Map<String, dynamic> newData =
-                                      new Map<String, dynamic>();
+                                  if (!_inProgressUpdate) {
+                                    setState(() {
+                                      _inProgressUpdate = true;
+                                    });
+                                    Map<String, dynamic> newData =
+                                        new Map<String, dynamic>();
 
-                                  if (emailController.text.substring(
-                                          (emailController.text.length) - 10,
-                                          emailController.text.length) ==
-                                      "@gmail.com") {
-                                    if (fullnameController.text !=
-                                        user.fullname)
-                                      newData.addAll({
-                                        "fullname": fullnameController.text
-                                      });
+                                    if (emailController.text.substring(
+                                            (emailController.text.length) - 10,
+                                            emailController.text.length) ==
+                                        "@gmail.com") {
+                                      if (fullnameController.text !=
+                                          user.fullname)
+                                        newData.addAll({
+                                          "fullname": fullnameController.text
+                                        });
 
-                                    if (emailController.text != user.email)
-                                      newData.addAll(
-                                          {"email": emailController.text});
+                                      if (emailController.text != user.email)
+                                        newData.addAll(
+                                            {"email": emailController.text});
 
-                                    if (newData.isNotEmpty)
-                                      FirestoreService().updateUser(
-                                        userId: user.id,
-                                        newData: newData,
-                                        nextAction: () {
-                                          AlertNotification(
-                                            context: context,
-                                            backgroundColor: Color(0xFF43A047),
-                                            aspectRatio: 664 / 95,
-                                            widthPercent: 0.615,
-                                            iconPath:
-                                                "assets/Icon_ChecklistSnackbar.svg",
-                                            textContent:
-                                                "Berhasil memperbarui informasi akun",
-                                            flexContentVertical: 38,
-                                            flexIconHorizontal: 35,
-                                            flexTextHorizontal: 539,
-                                            textMaxLines: 1,
-                                            duration: 2000,
-                                          );
-                                        },
-                                      );
-                                  } else {
-                                    setState(() => _emailIncorrect = true);
+                                      if (newData.isNotEmpty ||
+                                          imageFile != null)
+                                        updateUserProfile(
+                                          newData,
+                                          () {
+                                            AlertNotification(
+                                                context: context,
+                                                backgroundColor:
+                                                    Color(0xFF43A047),
+                                                aspectRatio: 664 / 95,
+                                                widthPercent: 0.615,
+                                                iconPath:
+                                                    "assets/Icon_ChecklistSnackbar.svg",
+                                                textContent:
+                                                    "Berhasil memperbarui informasi akun",
+                                                flexContentVertical: 38,
+                                                flexIconHorizontal: 35,
+                                                flexTextHorizontal: 539,
+                                                textMaxLines: 1,
+                                                duration: 2000,
+                                                nextAction: () {
+                                                  Timer(
+                                                      Duration(
+                                                          milliseconds: 2000),
+                                                      () {
+                                                    setState(() {
+                                                      _inProgressUpdate = false;
+                                                    });
+                                                  });
+                                                });
+                                          },
+                                        );
+                                    } else {
+                                      setState(() => _emailIncorrect = true);
+                                    }
                                   }
                                 },
                               ),

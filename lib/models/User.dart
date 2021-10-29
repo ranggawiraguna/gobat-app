@@ -1,5 +1,5 @@
 class User {
-  final String id, username, password, fullname, email;
+  final String id, username, password, fullname, email, image;
   final Map<String, List<String>> favorites, views;
 
   User({
@@ -8,6 +8,7 @@ class User {
     required this.password,
     required this.fullname,
     required this.email,
+    required this.image,
     required this.favorites,
     required this.views,
   });
@@ -23,6 +24,7 @@ class User {
         "password": password,
         "fullname": fullname,
         "email": email,
+        "image": "",
         "favorites": {"articles": [], "products": []},
         "views": {"articles": [], "products": []},
       };
@@ -33,6 +35,7 @@ class User {
         password: "",
         fullname: "",
         email: "",
+        image: "",
         favorites: {"articles": [], "products": []},
         views: {"articles": [], "products": []},
       );
@@ -43,6 +46,7 @@ class User {
         "password": this.password,
         "fullname": this.fullname,
         "email": this.email,
+        "image": this.image,
         "favorites": this.favorites,
         "views": this.views,
       };

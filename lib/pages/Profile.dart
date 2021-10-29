@@ -18,16 +18,20 @@ import 'package:gobat_app/widgets/MenuItemProfile.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
-
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  dynamic imageFile;
+
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
+    if (user.image != "")
+      imageFile = Image(image: NetworkImage(user.image));
+    else
+      imageFile = null;
 
     return Container(
       child: SizedBox(
@@ -59,12 +63,15 @@ class _ProfileState extends State<Profile> {
                             Flexible(
                               flex: 310,
                               child: ImageProfile(
-                                  context,
-                                  0.084,
-                                  0.075,
-                                  0.010,
-                                  Colors.white,
-                                  "assets/Photo_DefaultProfileUser.svg"),
+                                context,
+                                0.084,
+                                0.075,
+                                0.010,
+                                Colors.white,
+                                imageFile ??
+                                    Image.asset(
+                                        "assets/Photo_DefaultProfileUser.png"),
+                              ),
                             ),
                             FlexSpace(45),
                             Flexible(

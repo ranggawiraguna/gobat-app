@@ -13,13 +13,17 @@ dependencies:
   curved_navigation_bar: ^1.0.1
   external_app_launcher: ^2.0.1
   firebase_core: ^1.7.0
+  firebase_storage: ^10.0.6
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.9.2
   flutter_native_splash: ^1.2.4
   flutter_svg: ^0.23.0+1
   http: ^0.13.4
+  image_cropper: ^1.4.1
+  image_picker: ^0.8.4+3
   liquid_swipe: ^2.1.1
+  path: ^1.8.0
   percent_indicator: ^3.4.0
   provider: ^6.0.1
   shared_preferences: ^2.0.8
@@ -75,7 +79,7 @@ flutter:
     - assets/Decoration_LoginBottom.svg
     - assets/Decoration_RegisterTop.svg
     - assets/Decoration_RegisterBottom.svg
-    - assets/Photo_DefaultProfileUser.svg
+    - assets/Photo_DefaultProfileUser.png
     - assets/Icon_EditImage.svg
     - assets/ChangePassword_Illustration.svg
 

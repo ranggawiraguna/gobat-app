@@ -1,15 +1,19 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+T? cast<T>(x) => x is T ? x : null;
 
 AspectRatio ImageProfile(
-    BuildContext context,
-    double outsideRadiusPercent,
-    double insideRadiusPercent,
-    double paddingPercent,
-    Color borderColor,
-    String imagePath) {
+  BuildContext context,
+  double outsideRadiusPercent,
+  double insideRadiusPercent,
+  double paddingPercent,
+  Color borderColor,
+  dynamic image,
+) {
   return AspectRatio(
     aspectRatio: 1 / 1,
     child: ClipRRect(
@@ -21,7 +25,7 @@ AspectRatio ImageProfile(
           clipBehavior: Clip.hardEdge,
           margin: EdgeInsets.all(
               MediaQuery.of(context).size.width * paddingPercent),
-          child: SvgPicture.asset(imagePath),
+          child: image,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.all(Radius.circular(

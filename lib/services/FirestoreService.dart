@@ -33,6 +33,7 @@ class FirestoreService {
                 password: documentSnapshot.get("password"),
                 fullname: documentSnapshot.get("fullname"),
                 email: documentSnapshot.get("email"),
+                image: documentSnapshot.get("image"),
                 favorites: Map<String, List<dynamic>>.from(
                   documentSnapshot.get("favorites"),
                 ).map(
@@ -66,6 +67,7 @@ class FirestoreService {
                           password: documentSnapshot.get("password"),
                           fullname: documentSnapshot.get("fullname"),
                           email: documentSnapshot.get("email"),
+                          image: documentSnapshot.get("image"),
                           favorites: Map<String, List<dynamic>>.from(
                             documentSnapshot.get("favorites"),
                           ).map(
