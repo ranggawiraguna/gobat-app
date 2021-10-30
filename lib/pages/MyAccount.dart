@@ -103,6 +103,7 @@ class _MyAccountState extends State<MyAccount> {
 
     return SubProfileContainer(
       context: context,
+      userId: user.id,
       title: "Akun Saya",
       withAppBar: false,
       child: Column(

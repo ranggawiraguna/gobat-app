@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gobat_app/models/Article.dart';
+import 'package:gobat_app/models/Product.dart';
 import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/pages/ActivityHistory.dart';
 import 'package:gobat_app/pages/ChangePassword.dart';
@@ -233,10 +235,35 @@ class _ProfileState extends State<Profile> {
                                           FlexSpace(50),
                                           MenuItemProfile(
                                               "assets/Icon_ProfileLove.svg",
-                                              "Favorit Saya", () {
+                                              "Daftar Favorit", () {
                                             Navigator.of(context).push(
                                                 NavigatorSlide(
-                                                    child: ListFavorite(),
+                                                    child: MultiProvider(
+                                                        providers: [
+                                                          StreamProvider<
+                                                                  User?>.value(
+                                                              value:
+                                                                  FirestoreService()
+                                                                      .user(user
+                                                                          .id),
+                                                              initialData:
+                                                                  User.empty),
+                                                          StreamProvider<
+                                                                  List<
+                                                                      Product>>.value(
+                                                              value:
+                                                                  FirestoreService()
+                                                                      .products,
+                                                              initialData: []),
+                                                          StreamProvider<
+                                                                  List<
+                                                                      Article>>.value(
+                                                              value:
+                                                                  FirestoreService()
+                                                                      .articles,
+                                                              initialData: []),
+                                                        ],
+                                                        child: ListFavorite()),
                                                     direction:
                                                         AxisDirection.right));
                                           }),
@@ -246,7 +273,33 @@ class _ProfileState extends State<Profile> {
                                               "Riwayat Aktivitas", () {
                                             Navigator.of(context).push(
                                                 NavigatorSlide(
-                                                    child: ActivityHistory(),
+                                                    child: MultiProvider(
+                                                        providers: [
+                                                          StreamProvider<
+                                                                  User?>.value(
+                                                              value:
+                                                                  FirestoreService()
+                                                                      .user(user
+                                                                          .id),
+                                                              initialData:
+                                                                  User.empty),
+                                                          StreamProvider<
+                                                                  List<
+                                                                      Product>>.value(
+                                                              value:
+                                                                  FirestoreService()
+                                                                      .products,
+                                                              initialData: []),
+                                                          StreamProvider<
+                                                                  List<
+                                                                      Article>>.value(
+                                                              value:
+                                                                  FirestoreService()
+                                                                      .articles,
+                                                              initialData: []),
+                                                        ],
+                                                        child:
+                                                            ActivityHistory()),
                                                     direction:
                                                         AxisDirection.right));
                                           }),

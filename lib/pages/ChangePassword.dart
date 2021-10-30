@@ -35,6 +35,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
     return SubProfileContainer(
       context: context,
+      userId: user.id,
       title: "Ubah Password",
       withAppBar: false,
       child: Column(

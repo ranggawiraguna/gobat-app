@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gobat_app/models/Article.dart';
 import 'package:gobat_app/models/Product.dart';
 import 'package:gobat_app/models/User.dart';
-import 'package:gobat_app/services/AccountSessionManager.dart';
-import 'package:gobat_app/services/FirestoreService.dart';
+import 'package:gobat_app/widgets/GridViewProducts.dart';
+import 'package:gobat_app/widgets/ListViewArticles.dart';
 import 'package:gobat_app/widgets/SubProfileContainer.dart';
 import 'package:provider/provider.dart';
 
@@ -17,63 +17,42 @@ class ActivityHistory extends StatefulWidget {
 class _ActivityHistoryState extends State<ActivityHistory> {
   String? _userId;
   int _indexTabSelected = 0;
+  User? user;
+  late List<Product> products;
+  late List<Article> articles;
 
   @override
   void initState() {
-    AccountSessionManager()
-        .isUserLoggedIn()
-        .then((value) => AccountSessionManager().getActiveUserId().then(
-              (value) => setState(() => _userId = value),
-            ));
+    user = User.empty;
+    articles = [];
+    products = [];
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        StreamProvider<User?>.value(
-            value: FirestoreService().user(_userId ?? ""),
-            initialData: User.empty),
-        StreamProvider<List<Product>>.value(
-            value: FirestoreService().products, initialData: []),
-        StreamProvider<List<Article>>.value(
-            value: FirestoreService().articles, initialData: []),
+    user = Provider.of<User?>(context);
+    articles = Provider.of<List<Article>>(context);
+    products = Provider.of<List<Product>>(context);
+
+    return SubProfileContainer(
+      context: context,
+      userId: _userId,
+      title: "Riwayat Aktivitas",
+      withAppBar: true,
+      indexTabSelected: _indexTabSelected,
+      tabActions: <Function>[
+        () => setState(() => _indexTabSelected = 0),
+        () => setState(() => _indexTabSelected = 1),
       ],
-      child: SubProfileContainer(
-        context: context,
-        title: "Riwayat Aktivitas",
-        withAppBar: true,
-        indexTabSelected: _indexTabSelected,
-        tabActions: <Function>[
-          () => setState(() => _indexTabSelected = 0),
-          () => setState(() => _indexTabSelected = 1),
-        ],
-        child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 500),
-          child: (_indexTabSelected == 0)
-              ? TabPage_Products()
-              : TabPage_Articles(),
-        ),
-        makeClearFocus: false,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 500),
+        child: (_indexTabSelected == 0)
+            ? GridViewProducts(context, user ?? User.empty, products)
+            : ListViewArticles(context, user ?? User.empty, articles),
       ),
+      makeClearFocus: false,
     );
   }
-}
-
-Container TabPage_Products() {
-  return Container(
-    key: ValueKey<int>(0),
-    color: Colors.red,
-    height: 1000,
-  );
-}
-
-Container TabPage_Articles() {
-  return Container(
-    key: ValueKey<int>(1),
-    color: Colors.blue,
-    height: 1000,
-  );
 }

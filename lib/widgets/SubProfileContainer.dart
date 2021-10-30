@@ -8,6 +8,7 @@ import 'package:gobat_app/widgets/FlexSpace.dart';
 
 GestureDetector SubProfileContainer({
   required BuildContext context,
+  required String? userId,
   required String title,
   required Widget child,
   required bool makeClearFocus,
@@ -283,31 +284,10 @@ GestureDetector SubProfileContainer({
                                   ),
                                 ),
                                 Expanded(
-                                  child: SingleChildScrollView(
-                                    physics: ClampingScrollPhysics(),
-                                    child: Container(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            top: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.0463,
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.0463,
-                                            right: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.0463,
-                                            bottom: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.0926),
-                                        child: child,
-                                      ),
-                                    ),
-                                  ),
+                                  child: SizedBox(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      child: child),
                                 )
                               ],
                             ),
