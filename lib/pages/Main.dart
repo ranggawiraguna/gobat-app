@@ -15,12 +15,16 @@ import 'package:gobat_app/services/FirestoreService.dart';
 import 'package:provider/provider.dart';
 
 class Main extends StatefulWidget {
+  final int page;
+
+  Main({required this.page});
+
   @override
   _MainState createState() => _MainState();
 }
 
 class _MainState extends State<Main> {
-  int _page = 2;
+  late int _page;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   String? _userId;
 
@@ -28,6 +32,8 @@ class _MainState extends State<Main> {
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
+
+    _page = widget.page;
 
     AccountSessionManager()
         .isUserLoggedIn()
@@ -67,7 +73,7 @@ class _MainState extends State<Main> {
           ),
           bottomNavigationBar: CurvedNavigationBar(
             key: _bottomNavigationKey,
-            index: 2,
+            index: _page,
             height: 60.0,
             items: <Widget>[
               Icon(Icons.search, size: 30, color: Colors.white),

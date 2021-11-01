@@ -150,6 +150,7 @@ class FirestoreService {
             .map(
               (DocumentSnapshot documentSnapshot) => Product(
                 id: documentSnapshot.id,
+                category: documentSnapshot.get("category"),
                 counter: Map<String, int>.from(documentSnapshot.get("counter"))
                     .map((key, value) => MapEntry(key, cast<int>(value) ?? 0)),
                 information: Map<String, dynamic>.from(
@@ -169,6 +170,7 @@ class FirestoreService {
                   if (documentSnapshot.id == productId) {
                     return Product(
                       id: documentSnapshot.id,
+                      category: documentSnapshot.get("category"),
                       counter:
                           Map<String, int>.from(documentSnapshot.get("counter"))
                               .map((key, value) =>

@@ -11,12 +11,13 @@ class Article {
 
   static get empty => Article(
         id: "",
-        counter: {"favorite": 0, "view": 0},
+        counter: {"favorites": 0, "views": 0},
         information: {
           "title": "",
           "description": "",
           "image": "",
           "date_post": "",
+          "html": "",
         },
       );
 

@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
           home: (snapshot.connectionState == ConnectionState.waiting)
               ? SplashScreen()
               : _userId != null
-                  ? Main()
+                  ? Main(page: 2)
                   : OnBoarding(),
           debugShowCheckedModeBanner: false,
         );

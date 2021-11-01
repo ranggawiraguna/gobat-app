@@ -286,8 +286,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                                                     context)
                                                                 .pushAndRemoveUntil(
                                                                     NavigatorScale(
-                                                                      child:
-                                                                          Main(),
+                                                                      child: Main(
+                                                                          page:
+                                                                              2),
                                                                     ),
                                                                     (Route<dynamic>
                                                                             route) =>

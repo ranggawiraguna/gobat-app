@@ -303,6 +303,7 @@ GestureDetector SubProfileContainer({
               ),
             ],
           ),
+          backgroundColor: Color(0xFFF9F9F9),
         ),
       ),
     ),
