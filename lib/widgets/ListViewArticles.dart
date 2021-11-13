@@ -77,37 +77,49 @@ ListView ListViewArticles(
                                               FlexSpace(25),
                                               Flexible(
                                                 flex: 44,
-                                                child: Text(
-                                                  article.information["title"],
-                                                  overflow: TextOverflow.clip,
-                                                  textAlign: TextAlign.start,
-                                                  maxLines: 1,
-                                                  style: TextStyle(
+                                                child: SizedBox(
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  child: Text(
+                                                    article
+                                                        .information["title"],
                                                     overflow: TextOverflow.clip,
-                                                    fontSize:
-                                                        fullWidth * (36 / 1080),
-                                                    fontFamily: "Folks",
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
+                                                    textAlign: TextAlign.start,
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                      overflow:
+                                                          TextOverflow.clip,
+                                                      fontSize: fullWidth *
+                                                          (36 / 1080),
+                                                      fontFamily: "Folks",
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                               FlexSpace(5),
                                               Flexible(
                                                 flex: 144,
-                                                child: Text(
-                                                  article.information[
-                                                      "description"],
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.start,
-                                                  maxLines: 3,
-                                                  style: TextStyle(
-                                                    overflow: TextOverflow.clip,
-                                                    fontSize:
-                                                        fullWidth * (32 / 1080),
-                                                    fontFamily: "Folks",
-                                                    color: Colors.black,
+                                                child: SizedBox(
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  child: Text(
+                                                    article.information[
+                                                        "description"],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                    maxLines: 3,
+                                                    style: TextStyle(
+                                                      overflow:
+                                                          TextOverflow.clip,
+                                                      fontSize: fullWidth *
+                                                          (32 / 1080),
+                                                      fontFamily: "Folks",
+                                                      color: Colors.black,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
