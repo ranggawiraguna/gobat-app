@@ -17,7 +17,7 @@ class Article {
           "description": "",
           "image": "",
           "date_post": "",
-          "html": "",
+          "created_by": "",
         },
       );
 

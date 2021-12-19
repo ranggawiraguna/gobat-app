@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
@@ -51,6 +50,7 @@ Flexible MenuItemProfile(String iconPath, String name, Function nextAction) =>
           padding: EdgeInsets.all(0),
           primary: Colors.transparent,
           shadowColor: Colors.transparent,
+          elevation: 0,
         ),
         onPressed: () => nextAction(),
       ),

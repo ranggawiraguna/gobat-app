@@ -4,10 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 T? cast<T>(x) => x is T ? x : null;
 
-AspectRatio ImageProfile(
+AspectRatio ImageProfileCircular(
   BuildContext context,
-  double outsideRadiusPercent,
-  double insideRadiusPercent,
   double paddingPercent,
   Color borderColor,
   dynamic image,
@@ -15,8 +13,7 @@ AspectRatio ImageProfile(
   return AspectRatio(
     aspectRatio: 1 / 1,
     child: ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(
-          MediaQuery.of(context).size.width * outsideRadiusPercent)),
+      borderRadius: BorderRadius.all(Radius.circular(100)),
       child: Container(
         color: borderColor,
         child: Container(
@@ -26,8 +23,7 @@ AspectRatio ImageProfile(
           child: image,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.all(Radius.circular(
-                MediaQuery.of(context).size.width * insideRadiusPercent)),
+            borderRadius: BorderRadius.all(Radius.circular(100)),
           ),
         ),
       ),

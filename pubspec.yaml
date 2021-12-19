@@ -61,10 +61,14 @@ flutter:
     - assets/OnBoarding_Illustration_2.svg
     - assets/OnBoarding_Illustration_3.svg
     - assets/OnBoarding_IconNext.svg
+    - assets/Frame_DialogPrimary.svg
+    - assets/Frame_DialogFilterProduct.svg
     - assets/Icon_ChecklistSnackbar.svg
+    - assets/Icon_FilterBox.png
+    - assets/Icon_Eye.svg
+    - assets/Icon_Love.svg
     - assets/Icon_WarningSnackbar.svg
     - assets/Icon_ErrorSnackbar.svg
-    - assets/Frame_DialogPrimary.svg
     - assets/Icon_CloseDialog.svg
     - assets/Icon_ProfilePassword.svg
     - assets/Icon_ProfileLove.svg
@@ -73,11 +77,15 @@ flutter:
     - assets/Icon_ProfileAccount.svg
     - assets/Icon_ArrowNext.svg
     - assets/Icon_ArrowBack.svg
+    - assets/Icon_ArticleNarasumber.png
+    - assets/Icon_ButtonLike_Active.svg
+    - assets/Icon_ButtonLike_Inactive.svg
     - assets/Illustration_SendMailSuccess.svg
     - assets/Illustration_EmptyFavoriteArticle.svg
     - assets/Illustration_EmptyFavoriteProduct.svg
     - assets/Illustration_EmptyHistoryArticle.svg
     - assets/Illustration_EmptyHistoryProduct.svg
+    - assets/Illustration_Consultation.svg
     - assets/Decoration_LoginTop.svg
     - assets/Decoration_LoginBottom.svg
     - assets/Decoration_RegisterTop.svg
@@ -88,6 +96,22 @@ flutter:
     - assets/Icon_TrashDeleteItem2.svg
     - assets/Icon_EyeView.svg
     - assets/Icon_FavItem.svg
+    - assets/Icon_StarFavProduct.svg
+    - assets/Icon_TrafficActivityProduct.svg
+    - assets/Icon_LineProductPopular.svg
+    - assets/Icon_CategoryBatuk&Flu.png
+    - assets/Icon_CategoryDemam.png
+    - assets/Icon_CategoryHerbal.png
+    - assets/Icon_CategoryLainnya.png
+    - assets/Shape_ProductFav_1.svg
+    - assets/Shape_ProductFav_2.svg
+    - assets/Shape_ProductFav_3.svg
+    - assets/Shape_ProductFav_4.svg
+    - assets/Shape_ProductFav_5.svg
+    - assets/Card_Recomendation_1.png
+    - assets/Card_Recomendation_2.png
+    - assets/Card_Recomendation_3.png
+    - assets/Card_Recomendation_4.png
     - assets/ChangePassword_Illustration.svg
 
   fonts:

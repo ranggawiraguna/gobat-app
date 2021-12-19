@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gobat_app/models/Article.dart';
 import 'package:gobat_app/models/Product.dart';
@@ -36,6 +35,7 @@ class _ProfileState extends State<Profile> {
       imageFile = null;
 
     return Container(
+      padding: EdgeInsets.only(bottom: 60.0),
       child: SizedBox(
         width: double.infinity,
         height: double.infinity,
@@ -51,14 +51,16 @@ class _ProfileState extends State<Profile> {
                       aspectRatio: 1080 / 688,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Color(0xFF404040),
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(
-                                    MediaQuery.of(context).size.width * 0.138),
-                                bottomRight: Radius.circular(
-                                    MediaQuery.of(context).size.width *
-                                        0.138))),
+                          color: Color(0xFF404040),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(
+                              MediaQuery.of(context).size.width * 0.138,
+                            ),
+                            bottomRight: Radius.circular(
+                                MediaQuery.of(context).size.width * 0.138),
+                          ),
+                        ),
                         child: Column(
                           children: [
                             FlexSpace(90),
@@ -437,7 +439,6 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             ),
-            AspectRatio(aspectRatio: 1080 / 50),
           ],
         ),
       ),

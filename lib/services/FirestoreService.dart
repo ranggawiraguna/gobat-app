@@ -115,7 +115,7 @@ class FirestoreService {
             .toList(),
       );
 
-  Stream<List<Article>> article(String articleId) => firestore
+  Stream<Article> article(String articleId) => firestore
       .collection("articles")
       .snapshots()
       .map(
@@ -136,8 +136,11 @@ class FirestoreService {
                 })
                 .toList()
                 .reduce((value, element) {
-                  if ((element != null) && (element.id == articleId))
+                  if ((element != null) && (element.id == articleId)) {
                     return element;
+                  } else {
+                    return value;
+                  }
                 }) ??
             Article.empty,
       );
@@ -160,7 +163,7 @@ class FirestoreService {
             .toList(),
       );
 
-  Stream<List<Product>> product(String productId) => firestore
+  Stream<Product> product(String productId) => firestore
       .collection("products")
       .snapshots()
       .map(
@@ -183,8 +186,11 @@ class FirestoreService {
                 })
                 .toList()
                 .reduce((value, element) {
-                  if ((element != null) && (element.id == productId))
+                  if ((element != null) && (element.id == productId)) {
                     return element;
+                  } else {
+                    return value;
+                  }
                 }) ??
             Product.empty,
       );

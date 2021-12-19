@@ -1,11 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gobat_app/models/Product.dart';
 import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/models/Article.dart';
-import 'package:gobat_app/pages/Reading.dart';
+import 'package:gobat_app/pages/Articles.dart';
 import 'package:gobat_app/pages/Consultation.dart';
 import 'package:gobat_app/pages/Home.dart';
 import 'package:gobat_app/pages/Profile.dart';
@@ -16,7 +15,6 @@ import 'package:provider/provider.dart';
 
 class Main extends StatefulWidget {
   final int page;
-
   Main({required this.page});
 
   @override
@@ -32,7 +30,6 @@ class _MainState extends State<Main> {
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
-
     _page = widget.page;
 
     AccountSessionManager()
@@ -71,30 +68,42 @@ class _MainState extends State<Main> {
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
           ),
-          bottomNavigationBar: CurvedNavigationBar(
-            key: _bottomNavigationKey,
-            index: _page,
-            height: 60.0,
-            items: <Widget>[
-              Icon(Icons.search, size: 30, color: Colors.white),
-              Icon(Icons.article, size: 30, color: Colors.white),
-              Icon(Icons.home, size: 30, color: Colors.white),
-              Icon(Icons.chat_bubble, size: 30, color: Colors.white),
-              Icon(Icons.person, size: 30, color: Colors.white),
-            ],
-            color: Colors.black,
-            buttonBackgroundColor: Colors.black,
-            backgroundColor: Color(0xFFF9F9F9),
-            animationCurve: Curves.easeInOut,
-            animationDuration: Duration(milliseconds: 500),
-            onTap: (index) {
-              setState(() {
-                _page = index;
-              });
-            },
-            letIndexChange: (index) => true,
+          body: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: (MediaQuery.of(context).size.height -
+                MediaQuery.of(context).padding.top),
+            child: Stack(
+              children: [
+                getCurrentPage(_page),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CurvedNavigationBar(
+                    key: _bottomNavigationKey,
+                    index: _page,
+                    height: 60.0,
+                    items: <Widget>[
+                      Icon(Icons.search, size: 30, color: Colors.white),
+                      Icon(Icons.article, size: 30, color: Colors.white),
+                      Icon(Icons.home, size: 30, color: Colors.white),
+                      Icon(Icons.chat_bubble, size: 30, color: Colors.white),
+                      Icon(Icons.person, size: 30, color: Colors.white),
+                    ],
+                    color: Colors.black,
+                    buttonBackgroundColor: Colors.black,
+                    backgroundColor: Color(0x00F9F9F9),
+                    animationCurve: Curves.easeInOut,
+                    animationDuration: Duration(milliseconds: 500),
+                    onTap: (index) {
+                      setState(() {
+                        _page = index;
+                      });
+                    },
+                    letIndexChange: (index) => true,
+                  ),
+                ),
+              ],
+            ),
           ),
-          body: getCurrentPage(_page),
           backgroundColor: Color(0xFFF9F9F9),
         ),
       ),
@@ -107,7 +116,7 @@ class _MainState extends State<Main> {
         return Search();
 
       case 1:
-        return Reading();
+        return Articles();
 
       case 2:
         return Home();

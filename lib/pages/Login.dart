@@ -3,10 +3,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -496,6 +494,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                 ? DialogActionContainer(
                                     key: 0,
                                     context: context,
+                                    height: 1444,
+                                    pathFrame: "assets/Frame_DialogPrimary.svg",
                                     child: Column(
                                       children: [
                                         FlexSpace(100),
@@ -685,6 +685,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                 : DialogActionContainer(
                                     key: 1,
                                     context: context,
+                                    height: 1444,
+                                    pathFrame: "assets/Frame_DialogPrimary.svg",
                                     child: Column(
                                       children: [
                                         FlexSpace(100),

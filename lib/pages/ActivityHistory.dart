@@ -67,7 +67,7 @@ class _ActivityHistoryState extends State<ActivityHistory> {
                     },
                   ))
             : ((user!.views["articles"]!.length != 0)
-                ? ListViewArticles(context, user ?? User.empty, articles)
+                ? ListViewArticles(context, user ?? User.empty, articles, false)
                 : ProfileIllustrationEmpty(
                     context,
                     -2,

@@ -1,12 +1,13 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
 
 SizedBox DialogActionContainer(
     {required BuildContext context,
+    required int height,
+    required String pathFrame,
     required Column child,
     required Function() closeAction,
     required int key}) {
@@ -21,7 +22,7 @@ SizedBox DialogActionContainer(
         Flexible(
             flex: 1030,
             child: AspectRatio(
-              aspectRatio: 1030 / 1444,
+              aspectRatio: 1030 / height,
               child: Stack(
                 children: [
                   Row(children: [
@@ -31,14 +32,13 @@ SizedBox DialogActionContainer(
                         child: Column(children: [
                           FlexSpace(50),
                           Flexible(
-                            flex: 1344,
+                            flex: height,
                             child: SizedBox(
                               width: double.infinity,
                               height: double.infinity,
                               child: Stack(
                                 children: [
-                                  SvgPicture.asset(
-                                      "assets/Frame_DialogPrimary.svg"),
+                                  SvgPicture.asset(pathFrame),
                                   SizedBox(
                                     width: double.infinity,
                                     height: double.infinity,
