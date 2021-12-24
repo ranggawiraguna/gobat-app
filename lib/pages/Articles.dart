@@ -20,6 +20,7 @@ class _ArticlesState extends State<Articles> {
   late User user;
   late List<Article> articles;
   late List<Article> articlesFilter;
+  String _textEditingValue = "";
   List<String> sortCriterias = [
     "Judul Artikel",
     "Menaik",
@@ -85,6 +86,15 @@ class _ArticlesState extends State<Articles> {
       }
     }
 
+    if (_textEditingValue.isNotEmpty) {
+      articlesFilter = articlesFilter
+          .where((element) => element.information['title']
+              .toString()
+              .toLowerCase()
+              .contains(_textEditingValue.toLowerCase()))
+          .toList();
+    }
+
     return Container(
       child: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
@@ -123,6 +133,11 @@ class _ArticlesState extends State<Articles> {
                                     shadowColor: const Color(0x40000000),
                                     textFieldBackground: Colors.white,
                                     fontSize: 36,
+                                    onChanged: (String value) {
+                                      setState(() {
+                                        _textEditingValue = value;
+                                      });
+                                    },
                                   )),
                             ),
                             FlexSpace(30),

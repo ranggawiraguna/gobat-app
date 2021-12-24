@@ -34,6 +34,7 @@ class _HomeState extends State<Home> {
   bool _isSearchPage = false, _isSearchPageFocus = false;
   late User user;
   late List<Product> products, productsFilter, productsPopular;
+  String _textEditingValue = "";
   List<String> sortCriterias = [
     "Nama Produk",
     "Menaik",
@@ -109,6 +110,15 @@ class _HomeState extends State<Home> {
         productsFilter.sort((a, b) =>
             a.counter['favorites']!.compareTo(b.counter['favorites']!));
       }
+    }
+
+    if (_textEditingValue.isNotEmpty) {
+      productsFilter = productsFilter
+          .where((element) => element.information['name']
+              .toString()
+              .toLowerCase()
+              .contains(_textEditingValue.toLowerCase()))
+          .toList();
     }
 
     productsPopular = products.isEmpty ? products : products.sublist(0, 5);
@@ -508,6 +518,11 @@ class _HomeState extends State<Home> {
                                             focusNode: _searchProductFocusNode,
                                             focusNodeShadow:
                                                 _searchProductFocusNodeShadow,
+                                            onChanged: (String value) {
+                                              setState(() {
+                                                _textEditingValue = value;
+                                              });
+                                            },
                                           )),
                                     ),
                                     FlexSpace(30),
