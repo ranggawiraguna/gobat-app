@@ -11,7 +11,7 @@ import 'package:gobat_app/widgets/FlexSpace.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-ListView ListViewArticles(
+ListView ListViewMainArticles(
     BuildContext context, User user, List<Article> articles, bool mergeScroll) {
   double fullWidth = MediaQuery.of(context).size.width;
   List<double> padding = [fullWidth * 0.0463, fullWidth * 0.02315];
@@ -19,15 +19,12 @@ ListView ListViewArticles(
   try {
     return ListView.builder(
         key: ValueKey<int>(1),
-        itemCount: user.views["articles"]!.length,
+        itemCount: articles.length,
         physics: !mergeScroll
             ? ClampingScrollPhysics()
             : NeverScrollableScrollPhysics(),
         shrinkWrap: mergeScroll,
         itemBuilder: (context, index) {
-          Article article = (articles.firstWhere((element) =>
-              element.id.contains(user.views["articles"]![index])));
-
           return Padding(
             padding: EdgeInsets.only(
               top: (index == 0) ? padding[0] : padding[1],
@@ -48,7 +45,8 @@ ListView ListViewArticles(
                             value: FirestoreService().user(user.id),
                             initialData: User.empty),
                         StreamProvider<Article>.value(
-                            value: FirestoreService().article(article.id),
+                            value:
+                                FirestoreService().article(articles[index].id),
                             initialData: Article.empty),
                       ], child: ArticleRead()),
                     ),
@@ -78,12 +76,12 @@ ListView ListViewArticles(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.all(
                                   Radius.circular(fullWidth * (10 / 1080)))),
-                          child: article.id != ""
+                          child: articles[index].id != ""
                               ? FittedBox(
                                   fit: BoxFit.cover,
                                   child: Image(
                                     image: NetworkImage(
-                                      article.information["image"],
+                                      articles[index].information["image"],
                                     ),
                                   ),
                                 )
@@ -112,7 +110,7 @@ ListView ListViewArticles(
                                                     width: double.infinity,
                                                     height: double.infinity,
                                                     child: Text(
-                                                      article
+                                                      articles[index]
                                                           .information["title"],
                                                       overflow:
                                                           TextOverflow.clip,
@@ -139,7 +137,8 @@ ListView ListViewArticles(
                                                     width: double.infinity,
                                                     height: double.infinity,
                                                     child: Text(
-                                                      article.information[
+                                                      articles[index]
+                                                              .information[
                                                           "description"],
                                                       overflow:
                                                           TextOverflow.ellipsis,
@@ -172,10 +171,11 @@ ListView ListViewArticles(
                                     Center(
                                       child: Text(
                                         DateFormat('dd-MM-yyyy – kk:mm WIB')
-                                            .format(DateTime.parse(article
-                                                .information["post_date"]
-                                                .toDate()
-                                                .toString())),
+                                            .format(DateTime.parse(
+                                                articles[index]
+                                                    .information["post_date"]
+                                                    .toDate()
+                                                    .toString())),
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                           fontSize: fullWidth * (28 / 1080),
@@ -214,7 +214,8 @@ ListView ListViewArticles(
                                                 spacing: fullWidth * 0.01,
                                                 children: [
                                                   Text(
-                                                    article.counter["views"]
+                                                    articles[index]
+                                                        .counter["views"]
                                                         .toString(),
                                                     maxLines: 1,
                                                     style: TextStyle(
@@ -256,7 +257,8 @@ ListView ListViewArticles(
                                                 spacing: fullWidth * 0.01,
                                                 children: [
                                                   Text(
-                                                    article.counter["favorites"]
+                                                    articles[index]
+                                                        .counter["favorites"]
                                                         .toString(),
                                                     maxLines: 1,
                                                     style: TextStyle(

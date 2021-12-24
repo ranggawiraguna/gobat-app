@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gobat_app/models/Article.dart';
 import 'package:gobat_app/models/User.dart';
+import 'package:gobat_app/services/FirestoreService.dart';
 import 'package:gobat_app/services/GlobalValue.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
 import 'package:intl/intl.dart';
@@ -18,12 +19,42 @@ class ArticleRead extends StatefulWidget {
 }
 
 class _ArticleReadState extends State<ArticleRead> {
-  bool _isActiveFavorite = false;
+  bool _isActiveFavorite = false, _doneInsertView = false;
 
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     Article article = Provider.of<Article>(context);
+
+    if (user.id != "" && article.id != "") {
+      if (!_doneInsertView) {
+        setState(() => _doneInsertView = true);
+
+        Map<String, List<String>> userViews =
+            Map<String, List<String>>.from(user.views);
+        if (userViews['articles']!.contains(article.id)) {
+          userViews['articles']!
+              .removeWhere((element) => element == article.id);
+        } else {
+          Map<String, int> counterArticle =
+              Map<String, int>.from(article.counter);
+          counterArticle['views'] = (counterArticle['views']! + 1);
+          FirestoreService().updateArticle(
+            articleId: article.id,
+            newData: {"counter": counterArticle},
+          );
+        }
+        userViews['articles']!.insert(0, article.id);
+        FirestoreService().updateUser(
+          userId: user.id,
+          newData: {"views": userViews},
+        );
+      }
+
+      setState(() {
+        _isActiveFavorite = user.favorites['articles']!.contains(article.id);
+      });
+    }
 
     return SafeArea(
       child: Container(
@@ -167,7 +198,8 @@ class _ArticleReadState extends State<ArticleRead> {
                                               "assets/Icon_Love.svg"),
                                         ),
                                         Text(
-                                          article.counter['views'].toString(),
+                                          article.counter['favorites']
+                                              .toString(),
                                           textAlign: TextAlign.center,
                                           overflow: TextOverflow.clip,
                                           maxLines: 1,
@@ -330,7 +362,7 @@ class _ArticleReadState extends State<ArticleRead> {
                                                                     880 / 15),
                                                             Text(
                                                               (article.id != ""
-                                                                  ? DateFormat('dd-MM-yyyy – kk:mm WIB').format(DateTime.parse(article
+                                                                  ? DateFormat('dd-MM-yyyy - kk:mm WIB').format(DateTime.parse(article
                                                                       .information[
                                                                           "post_date"]
                                                                       .toDate()
@@ -429,10 +461,82 @@ class _ArticleReadState extends State<ArticleRead> {
                                                   ),
                                                   child: IconButton(
                                                     onPressed: () {
-                                                      setState(() {
-                                                        _isActiveFavorite =
-                                                            !_isActiveFavorite;
-                                                      });
+                                                      if (user.id != "" &&
+                                                          article.id != "") {
+                                                        Map<String,
+                                                                List<String>>
+                                                            userFavorites = Map<
+                                                                    String,
+                                                                    List<
+                                                                        String>>.from(
+                                                                user.favorites);
+                                                        Map<String, int>
+                                                            counterArticle =
+                                                            Map<String,
+                                                                    int>.from(
+                                                                article
+                                                                    .counter);
+                                                        if (_isActiveFavorite) {
+                                                          userFavorites[
+                                                                  'articles']!
+                                                              .removeWhere(
+                                                                  (element) =>
+                                                                      element ==
+                                                                      article
+                                                                          .id);
+                                                          FirestoreService()
+                                                              .updateUser(
+                                                            userId: user.id,
+                                                            newData: {
+                                                              "favorites":
+                                                                  userFavorites
+                                                            },
+                                                          );
+
+                                                          counterArticle[
+                                                                  'favorites'] =
+                                                              (counterArticle[
+                                                                      'favorites']! -
+                                                                  1);
+                                                          FirestoreService()
+                                                              .updateArticle(
+                                                            articleId:
+                                                                article.id,
+                                                            newData: {
+                                                              "counter":
+                                                                  counterArticle
+                                                            },
+                                                          );
+                                                        } else {
+                                                          userFavorites[
+                                                                  'articles']!
+                                                              .insert(0,
+                                                                  article.id);
+                                                          FirestoreService()
+                                                              .updateUser(
+                                                            userId: user.id,
+                                                            newData: {
+                                                              "favorites":
+                                                                  userFavorites
+                                                            },
+                                                          );
+
+                                                          counterArticle[
+                                                                  'favorites'] =
+                                                              (counterArticle[
+                                                                      'favorites']! +
+                                                                  1);
+                                                          FirestoreService()
+                                                              .updateArticle(
+                                                            articleId:
+                                                                article.id,
+                                                            newData: {
+                                                              "counter":
+                                                                  counterArticle
+                                                            },
+                                                          );
+                                                        }
+                                                      }
                                                     },
                                                     padding: EdgeInsets.all(0),
                                                     splashRadius: 1,

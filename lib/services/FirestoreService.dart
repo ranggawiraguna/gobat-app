@@ -98,6 +98,19 @@ class FirestoreService {
                 User.empty,
           );
 
+  void updateArticle({
+    required String articleId,
+    required Map<String, dynamic> newData,
+    Function? nextAction,
+  }) {
+    FirestoreService()
+        .firestore
+        .collection("articles")
+        .doc(articleId)
+        .update(newData)
+        .whenComplete(() => (nextAction != null) ? nextAction() : null);
+  }
+
   Stream<List<Article>> get articles => firestore
       .collection("articles")
       .snapshots()
@@ -144,6 +157,19 @@ class FirestoreService {
                 }) ??
             Article.empty,
       );
+
+  void updateProduct({
+    required String productId,
+    required Map<String, dynamic> newData,
+    Function? nextAction,
+  }) {
+    FirestoreService()
+        .firestore
+        .collection("products")
+        .doc(productId)
+        .update(newData)
+        .whenComplete(() => (nextAction != null) ? nextAction() : null);
+  }
 
   Stream<List<Product>> get products => firestore
       .collection("products")

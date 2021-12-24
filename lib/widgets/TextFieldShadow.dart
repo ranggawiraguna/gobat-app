@@ -13,8 +13,10 @@ class TextFieldShadow extends StatefulWidget {
   final double shadowSpread;
   final Color shadowColor;
   final double fontSize;
-  final Function? onFocusChange;
-  final void Function()? onTap;
+  final bool? enabled;
+  final FocusNode? focusNode;
+  final FocusNode? focusNodeShadow;
+  final void Function(String value)? onChanged;
 
   const TextFieldShadow({
     Key? key,
@@ -27,8 +29,10 @@ class TextFieldShadow extends StatefulWidget {
     required this.shadowSpread,
     required this.shadowColor,
     required this.fontSize,
-    this.onFocusChange,
-    this.onTap,
+    this.enabled,
+    this.focusNode,
+    this.focusNodeShadow,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -62,6 +66,7 @@ class _TextFieldShadowState extends State<TextFieldShadow> {
               )
             ]),
         child: Focus(
+          focusNode: widget.focusNodeShadow,
           onFocusChange: (hasFocus) {
             setState(() {
               shadowColor =
@@ -69,7 +74,14 @@ class _TextFieldShadowState extends State<TextFieldShadow> {
             });
           },
           child: TextField(
+            focusNode: widget.focusNode,
+            enabled: widget.enabled ?? true,
             controller: widget.controller,
+            onChanged: (String value) {
+              if (widget.onChanged != null) {
+                widget.onChanged!(value);
+              }
+            },
             decoration: InputDecoration(
               isDense: true,
               labelText: widget.labelText,
@@ -89,7 +101,6 @@ class _TextFieldShadowState extends State<TextFieldShadow> {
               fontFamily: 'Folks',
               fontSize: GlobalValue.getSizeConstraint(context, widget.fontSize),
             ),
-            onTap: widget.onTap,
           ),
         ));
   }

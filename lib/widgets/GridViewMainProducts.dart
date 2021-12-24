@@ -121,7 +121,7 @@ GridView GridViewMainProducts(
                           child: SvgPicture.asset("assets/Icon_Love.svg"),
                         ),
                         Text(
-                          product.counter['views'].toString(),
+                          product.counter['favorites'].toString(),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.clip,
                           maxLines: 1,

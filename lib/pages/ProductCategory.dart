@@ -27,20 +27,10 @@ class _ProductCategoryState extends State<ProductCategory> {
   final TextEditingController _searchProductController =
       TextEditingController();
 
-  late User user;
-  late List<Product> products;
-  late List<Product> productsFilter;
-  late List<String> sortCriterias;
-
-  @override
-  void initState() {
-    sortCriterias = [
-      "name",
-      "ascending",
-    ];
-
-    super.initState();
-  }
+  List<String> sortCriterias = [
+    "Nama Produk",
+    "Menaik",
+  ];
 
   _showDialogFilterProduct() {
     showGeneralDialog(
@@ -57,25 +47,51 @@ class _ProductCategoryState extends State<ProductCategory> {
       },
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {
-        return DialogFilterProduct();
+        return DialogFilterProduct(
+          sortCriteria: sortCriterias,
+          onConfirmed: (String sort, String type) {
+            setState(() {
+              sortCriterias = [sort, type];
+            });
+          },
+        );
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    user = Provider.of<User?>(context) ?? User.empty;
-    products = Provider.of<List<Product>>(context)
+    User user = Provider.of<User?>(context) ?? User.empty;
+    List<Product> products = Provider.of<List<Product>>(context)
         .where((element) => element.category == widget.category)
         .toList();
 
-    productsFilter = products;
-    if (sortCriterias[0] == "name" && sortCriterias[1] == 'ascending') {
-      productsFilter.sort(
-          (a, b) => a.information['name'].compareTo(b.information['name']));
-    } else if (sortCriterias[0] == "name" && sortCriterias[1] == 'descending') {
-      productsFilter.sort(
-          (a, b) => b.information['name'].compareTo(a.information['name']));
+    List<Product> productsFilter = products;
+    if (products.isNotEmpty) {
+      if (sortCriterias[0] == "Nama Produk" && sortCriterias[1] == 'Menaik') {
+        productsFilter.sort(
+            (a, b) => a.information['name'].compareTo(b.information['name']));
+      } else if (sortCriterias[0] == "Nama Produk" &&
+          sortCriterias[1] == 'Menurun') {
+        productsFilter.sort(
+            (a, b) => b.information['name'].compareTo(a.information['name']));
+      } else if (sortCriterias[0] == "Paling Banyak Dilihat" &&
+          sortCriterias[1] == 'Menurun') {
+        productsFilter
+            .sort((a, b) => b.counter['views']!.compareTo(a.counter['views']!));
+      } else if (sortCriterias[0] == "Paling Banyak Dilihat" &&
+          sortCriterias[1] == 'Menaik') {
+        productsFilter
+            .sort((a, b) => a.counter['views']!.compareTo(b.counter['views']!));
+      } else if (sortCriterias[0] == "Paling Banyak Disukai" &&
+          sortCriterias[1] == 'Menurun') {
+        productsFilter.sort((a, b) =>
+            b.counter['favorites']!.compareTo(a.counter['favorites']!));
+      } else if (sortCriterias[0] == "Paling Banyak Disukai" &&
+          sortCriterias[1] == 'Menaik') {
+        productsFilter.sort((a, b) =>
+            a.counter['favorites']!.compareTo(b.counter['favorites']!));
+      }
     }
 
     return SubProfileContainer(
@@ -115,7 +131,6 @@ class _ProductCategoryState extends State<ProductCategory> {
                               shadowColor: const Color(0x40000000),
                               textFieldBackground: Colors.white,
                               fontSize: 36,
-                              onTap: () {},
                             )),
                       ),
                       FlexSpace(30),

@@ -4,7 +4,7 @@ import 'package:gobat_app/models/User.dart';
 import 'package:gobat_app/services/GlobalValue.dart';
 import 'package:gobat_app/widgets/DialogFilterArticle.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
-import 'package:gobat_app/widgets/ListViewArticles.dart';
+import 'package:gobat_app/widgets/ListViewMainArticles.dart';
 import 'package:gobat_app/widgets/TextFieldShadow.dart';
 import 'package:provider/provider.dart';
 
@@ -20,17 +20,10 @@ class _ArticlesState extends State<Articles> {
   late User user;
   late List<Article> articles;
   late List<Article> articlesFilter;
-  late List<String> sortCriterias;
-
-  @override
-  void initState() {
-    sortCriterias = [
-      "name",
-      "ascending",
-    ];
-
-    super.initState();
-  }
+  List<String> sortCriterias = [
+    "Judul Artikel",
+    "Menaik",
+  ];
 
   _showDialogFilterProduct() {
     showGeneralDialog(
@@ -47,7 +40,14 @@ class _ArticlesState extends State<Articles> {
       },
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {
-        return DialogFilterArticle();
+        return DialogFilterArticle(
+          sortCriteria: sortCriterias,
+          onConfirmed: (String sort, String type) {
+            setState(() {
+              sortCriterias = [sort, type];
+            });
+          },
+        );
       },
     );
   }
@@ -58,13 +58,31 @@ class _ArticlesState extends State<Articles> {
     articles = Provider.of<List<Article>>(context);
 
     articlesFilter = articles;
-    if (sortCriterias[0] == "title" && sortCriterias[1] == 'ascending') {
-      articlesFilter.sort(
-          (a, b) => a.information['title'].compareTo(b.information['title']));
-    } else if (sortCriterias[0] == "title" &&
-        sortCriterias[1] == 'descending') {
-      articlesFilter.sort(
-          (a, b) => b.information['title'].compareTo(a.information['title']));
+    if (articles.isNotEmpty) {
+      if (sortCriterias[0] == "Judul Artikel" && sortCriterias[1] == 'Menaik') {
+        articlesFilter.sort(
+            (a, b) => a.information['title'].compareTo(b.information['title']));
+      } else if (sortCriterias[0] == "Judul Artikel" &&
+          sortCriterias[1] == 'Menurun') {
+        articlesFilter.sort(
+            (a, b) => b.information['title'].compareTo(a.information['title']));
+      } else if (sortCriterias[0] == "Paling Banyak Dilihat" &&
+          sortCriterias[1] == 'Menurun') {
+        articlesFilter
+            .sort((a, b) => b.counter['views']!.compareTo(a.counter['views']!));
+      } else if (sortCriterias[0] == "Paling Banyak Dilihat" &&
+          sortCriterias[1] == 'Menaik') {
+        articlesFilter
+            .sort((a, b) => a.counter['views']!.compareTo(b.counter['views']!));
+      } else if (sortCriterias[0] == "Paling Banyak Disukai" &&
+          sortCriterias[1] == 'Menurun') {
+        articlesFilter.sort((a, b) =>
+            b.counter['favorites']!.compareTo(a.counter['favorites']!));
+      } else if (sortCriterias[0] == "Paling Banyak Disukai" &&
+          sortCriterias[1] == 'Menaik') {
+        articlesFilter.sort((a, b) =>
+            a.counter['favorites']!.compareTo(b.counter['favorites']!));
+      }
     }
 
     return Container(
@@ -105,7 +123,6 @@ class _ArticlesState extends State<Articles> {
                                     shadowColor: const Color(0x40000000),
                                     textFieldBackground: Colors.white,
                                     fontSize: 36,
-                                    onTap: () {},
                                   )),
                             ),
                             FlexSpace(30),
@@ -135,7 +152,7 @@ class _ArticlesState extends State<Articles> {
                     ],
                   ),
                 ),
-                ListViewArticles(context, user, articlesFilter, true),
+                ListViewMainArticles(context, user, articlesFilter, true),
                 AspectRatio(aspectRatio: 1080 / 300),
               ],
             ),
