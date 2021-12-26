@@ -15,6 +15,7 @@ class Article {
         information: {
           "title": "",
           "description": "",
+          "banner": "",
           "image": "",
           "date_post": "",
           "created_by": "",

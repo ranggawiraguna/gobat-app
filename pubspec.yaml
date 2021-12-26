@@ -90,6 +90,27 @@ flutter:
     - assets/Illustration_EmptyHistoryProduct.svg
     - assets/Illustration_EmptySearch.svg
     - assets/Illustration_Consultation.svg
+    - assets/Illustration_ConsultationError.svg
+    - assets/Illustration_Gejala_1.png
+    - assets/Illustration_Gejala_2.png
+    - assets/Illustration_Gejala_3.png
+    - assets/Illustration_Gejala_4.png
+    - assets/Illustration_Gejala_5.png
+    - assets/Illustration_Gejala_6.png
+    - assets/Illustration_Gejala_7.png
+    - assets/Illustration_Gejala_8.png
+    - assets/Illustration_Gejala_9.png
+    - assets/Illustration_Gejala_10.png
+    - assets/Illustration_Gejala_11.png
+    - assets/Illustration_Gejala_12.png
+    - assets/Illustration_Gejala_13.png
+    - assets/Illustration_Gejala_14.png
+    - assets/Illustration_Gejala_15.png
+    - assets/Illustration_Gejala_16.png
+    - assets/Illustration_Gejala_17.png
+    - assets/Illustration_Gejala_18.png
+    - assets/Illustration_Gejala_19.png
+    - assets/Illustration_Gejala_20.png
     - assets/Decoration_LoginTop.svg
     - assets/Decoration_LoginBottom.svg
     - assets/Decoration_RegisterTop.svg
@@ -106,12 +127,22 @@ flutter:
     - assets/Icon_CategoryBatuk&Flu.png
     - assets/Icon_CategoryDemam.png
     - assets/Icon_CategoryHerbal.png
+    - assets/Icon_CategoryAntibiotik&AntiJamur.png
+    - assets/Icon_CategoryAntiNyeri.png
+    - assets/Icon_CategoryAntiVirus.png
+    - assets/Icon_CategoryKulit.png
+    - assets/Icon_CategoryMulut&Tenggorokan.png
+    - assets/Icon_CategoryOtotTulangdanSendi.png
+    - assets/Icon_CategorySaluranPencernaan.png
     - assets/Icon_CategoryLainnya.png
     - assets/Shape_ProductFav_1.svg
     - assets/Shape_ProductFav_2.svg
     - assets/Shape_ProductFav_3.svg
     - assets/Shape_ProductFav_4.svg
     - assets/Shape_ProductFav_5.svg
+    - assets/Shape_BannerBackground_1.svg
+    - assets/Shape_BannerBackground_2.svg
+    - assets/Shape_BannerBackground_3.svg
     - assets/Card_Recomendation_1.png
     - assets/Card_Recomendation_2.png
     - assets/Card_Recomendation_3.png

@@ -303,6 +303,12 @@ GridView GridViewFavoriteProducts(
                     FirestoreService().updateUser(
                         userId: user.id,
                         newData: {"favorites": user.favorites});
+
+                    product.counter['favorites'] =
+                        product.counter['favorites']! - 1;
+                    FirestoreService().updateProduct(
+                        productId: product.id,
+                        newData: {"counter": product.counter});
                   },
                 )
               ],

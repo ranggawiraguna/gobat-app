@@ -1,8 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gobat_app/models/User.dart';
+import 'package:gobat_app/pages/ConsultationQuestions.dart';
+import 'package:gobat_app/services/FirestoreService.dart';
+import 'package:gobat_app/services/NavigatorServices.dart';
 import 'package:gobat_app/widgets/FlexButton.dart';
 import 'package:gobat_app/widgets/FlexSpace.dart';
+import 'package:provider/provider.dart';
 
 class Consultation extends StatefulWidget {
   @override
@@ -12,6 +17,8 @@ class Consultation extends StatefulWidget {
 class ConsultationState extends State<Consultation> {
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
+
     return Container(
       padding: EdgeInsets.only(bottom: 60.0),
       child: SizedBox(
@@ -90,7 +97,18 @@ class ConsultationState extends State<Consultation> {
                                     buttonRadius:
                                         MediaQuery.of(context).size.width *
                                             (20 / 1080),
-                                    action: () {}),
+                                    action: () {
+                                      Navigator.of(context).push(
+                                        NavigatorSlide(
+                                            child: StreamProvider<User?>.value(
+                                              value: FirestoreService()
+                                                  .user(user.id),
+                                              initialData: User.empty,
+                                              child: ConsultationQuestions(),
+                                            ),
+                                            direction: AxisDirection.up),
+                                      );
+                                    }),
                               ],
                             )),
                         FlexSpace(129),

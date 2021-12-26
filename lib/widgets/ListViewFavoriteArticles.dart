@@ -183,6 +183,20 @@ ListView ListViewFavoriteArticles(
                                                           "favorites":
                                                               user.favorites
                                                         });
+
+                                                    article.counter[
+                                                            'favorites'] =
+                                                        article.counter[
+                                                                'favorites']! -
+                                                            1;
+                                                    FirestoreService()
+                                                        .updateArticle(
+                                                            articleId:
+                                                                article.id,
+                                                            newData: {
+                                                          "counter":
+                                                              article.counter
+                                                        });
                                                   },
                                                 ),
                                               )

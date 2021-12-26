@@ -59,3 +59,22 @@ class NavigatorSlide extends PageRouteBuilder {
     }
   }
 }
+
+class NavigatorFade extends PageRouteBuilder {
+  final Widget child;
+
+  NavigatorFade({
+    required this.child,
+  }) : super(
+          transitionDuration: Duration(milliseconds: 500),
+          pageBuilder: (context, animation, secondaryAnimation) => child,
+        );
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) =>
+      FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+}

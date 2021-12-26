@@ -1,9 +1,14 @@
 // ignore_for_file: unused_element
 
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gobat_app/models/Article.dart';
 import 'package:gobat_app/models/Product.dart';
 import 'package:gobat_app/models/User.dart';
+import 'package:gobat_app/pages/ArticleRead.dart';
 import 'package:gobat_app/pages/MyAccount.dart';
 import 'package:gobat_app/services/AccountSessionManager.dart';
 import 'package:gobat_app/services/FirestoreService.dart';
@@ -26,7 +31,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final TextEditingController _searchProductController =
       TextEditingController();
-
+  final _pageController = PageController();
+  final _currentPageNotifier = ValueNotifier<int>(0);
   final FocusNode _searchProductFocusNode = FocusNode(),
       _searchProductFocusNodeShadow = FocusNode();
 
@@ -34,11 +40,23 @@ class _HomeState extends State<Home> {
   bool _isSearchPage = false, _isSearchPageFocus = false;
   late User user;
   late List<Product> products, productsFilter, productsPopular;
+  late List<Article> articles, articlesFilter;
   String _textEditingValue = "";
   List<String> sortCriterias = [
     "Nama Produk",
     "Menaik",
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
+    });
+  }
 
   _showDialogFilterProduct() {
     _searchProductFocusNodeShadow.unfocus();
@@ -73,6 +91,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
     products = Provider.of<List<Product>>(context);
+    articles = Provider.of<List<Article>>(context);
 
     List<String> categories = [];
     if (products.isNotEmpty) {
@@ -81,6 +100,11 @@ class _HomeState extends State<Home> {
           categories.add(product.category);
         }
       }
+    }
+
+    categories.sort();
+    if (categories.contains("Lainnya")) {
+      categories.removeWhere((element) => element == "Lainnya");
       categories.add("Lainnya");
     }
 
@@ -110,6 +134,14 @@ class _HomeState extends State<Home> {
         productsFilter.sort((a, b) =>
             a.counter['favorites']!.compareTo(b.counter['favorites']!));
       }
+    }
+
+    articlesFilter = articles;
+    articlesFilter.sort((a, b) =>
+        (b.counter['views']! + b.counter['favorites']!)
+            .compareTo(a.counter['views']! + a.counter['favorites']!));
+    if (articlesFilter.isNotEmpty) {
+      articlesFilter = articlesFilter.sublist(0, 3);
     }
 
     if (_textEditingValue.isNotEmpty) {
@@ -257,25 +289,76 @@ class _HomeState extends State<Home> {
                         AspectRatio(aspectRatio: 1080 / 50),
                         AspectRatio(
                           aspectRatio: 1080 / 300,
-                          child: Row(
-                            children: [
-                              FlexSpace(75),
-                              Flexible(
-                                flex: 930,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF404040),
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                          MediaQuery.of(context).size.width *
-                                              0.03),
-                                    ),
-                                  ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: double.infinity,
+                            child: Stack(
+                              children: [
+                                PageView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  controller: _pageController,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return SizedBox(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.all(0),
+                                          primary: Colors.transparent,
+                                          shadowColor: Colors.transparent,
+                                          elevation: 0,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            NavigatorScale(
+                                              child: MultiProvider(providers: [
+                                                StreamProvider<User?>.value(
+                                                    value: FirestoreService()
+                                                        .user(user.id),
+                                                    initialData: User.empty),
+                                                StreamProvider<Article>.value(
+                                                    value: FirestoreService()
+                                                        .article(articlesFilter[
+                                                                index % 3]
+                                                            .id),
+                                                    initialData: Article.empty),
+                                              ], child: ArticleRead()),
+                                            ),
+                                          );
+                                        },
+                                        child: Stack(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.center,
+                                              child: SvgPicture.asset(
+                                                  "assets/Shape_BannerBackground_" +
+                                                      ((index % 3) + 1)
+                                                          .toString() +
+                                                      ".svg"),
+                                            ),
+                                            articlesFilter.isNotEmpty
+                                                ? Align(
+                                                    alignment: Alignment.center,
+                                                    child: Image.network(
+                                                        articlesFilter[
+                                                                index % 3]
+                                                            .information[
+                                                                'banner']
+                                                            .toString()),
+                                                  )
+                                                : SizedBox.shrink(),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  onPageChanged: (int index) {
+                                    _currentPageNotifier.value = index % 3;
+                                  },
                                 ),
-                              ),
-                              FlexSpace(75),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         AspectRatio(aspectRatio: 1080 / 50),
@@ -398,7 +481,9 @@ class _HomeState extends State<Home> {
                                   userId: user.id,
                                   context: context,
                                   iconPath: "assets/Icon_Category" +
-                                      category.replaceAll(" ", "") +
+                                      category
+                                          .replaceAll(" ", "")
+                                          .replaceAll(",", "") +
                                       ".png",
                                   name: category,
                                 );

@@ -158,6 +158,9 @@ class FirestoreService {
             Article.empty,
       );
 
+  void addProduct(Map<String, dynamic> product) =>
+      firestore.collection("products").add(product);
+
   void updateProduct({
     required String productId,
     required Map<String, dynamic> newData,
